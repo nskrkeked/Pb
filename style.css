@@ -1,35 +1,34 @@
-body \{\cb1 \
-\cb3 margin: 0;\cb1 \
-\cb3 font-family: Arial;\cb1 \
-\cb3 background: #0a0f1f;\cb1 \
-\cb3 color: white;\cb1 \
-\cb3 \}\cb1 \
-\
-\cb3 .header \{\cb1 \
-\cb3 text-align: center;\cb1 \
-\cb3 padding: 60px;\cb1 \
-\cb3 background: linear-gradient(90deg, #111827, #1e3a8a);\cb1 \
-\cb3 \}\cb1 \
-\
-\cb3 .cards \{\cb1 \
-\cb3 display: flex;\cb1 \
-\cb3 justify-content: center;\cb1 \
-\cb3 gap: 30px;\cb1 \
-\cb3 padding: 40px;\cb1 \
-\cb3 \}\cb1 \
-\
-\cb3 .card \{\cb1 \
-\cb3 background: #1f2937;\cb1 \
-\cb3 padding: 30px;\cb1 \
-\cb3 border-radius: 15px;\cb1 \
-\cb3 width: 220px;\cb1 \
-\cb3 cursor: pointer;\cb1 \
-\cb3 transition: 0.3s;\cb1 \
-\cb3 box-shadow: 0 0 10px rgba(0,0,0,0.5);\cb1 \
-\cb3 \}\cb1 \
-\
-\cb3 .card:hover \{\cb1 \
-\cb3 transform: scale(1.1);\cb1 \
-\cb3 background: #2563eb;\cb1 \
-\cb3 \}\cb1 \
+body {
+margin: 0;
+font-family: Arial;
+background: #0a0f1f;
+color: white;
+}
+
+.header {
+text-align: center;
+padding: 60px;
+background: linear-gradient(90deg, #111827, #1e3a8a);
+}
+
+.cards {
+display: flex;
+justify-content: center;
+gap: 30px;
+padding: 40px;
+}
+
+.card {
+background: #1f2937;
+padding: 30px;
+border-radius: 15px;
+width: 220px;
+cursor: pointer;
+transition: 0.3s;
+box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.card:hover {
+transform: scale(1.1);
+background: #2563eb;
 }
