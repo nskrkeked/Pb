@@ -2,35 +2,171 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Semiconductor Tech</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semiconductor Research</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f7fa;
+    color: #333;
+}
+
+/* 헤더 */
+header {
+    background: #0d1b2a;
+    color: white;
+    padding: 20px 50px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+}
+
+header h1 {
+    display: inline;
+}
+
+nav {
+    float: right;
+}
+
+nav a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #00b4d8;
+}
+
+/* 메인 */
+section {
+    padding: 100px 50px;
+}
+
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('https://images.unsplash.com/photo-1581090700227-1e8a7c9a6c68');
+    background-size: cover;
+    color: white;
+    text-align: center;
+    height: 100vh;
+}
+
+.hero h2 {
+    font-size: 50px;
+    margin-top: 150px;
+}
+
+.hero p {
+    font-size: 20px;
+}
+
+/* 카드 */
+.card-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    flex: 1;
+    min-width: 250px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 푸터 */
+footer {
+    background: #0d1b2a;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+</style>
 </head>
+
 <body>
 
-<header class="header">
-<h1>SEMICONDUCTOR</h1>
-<p>반도체 기술과 미래 산업</p>
+<header>
+    <h1>Semiconductor Lab</h1>
+    <nav>
+        <a href="#about">소개</a>
+        <a href="#research">연구</a>
+        <a href="#technology">기술</a>
+        <a href="#contact">연락</a>
+    </nav>
 </header>
 
-<section class="cards">
-
-<div class="card" onclick="goPage()">
-<h2>반도체란?</h2>
-<p>전기가 흐르기도, 안 흐르기도 하는 물질</p>
-</div>
-
-<div class="card">
-<h2>트랜지스터</h2>
-<p>전류를 제어하는 핵심 소자</p>
-</div>
-
-<div class="card">
-<h2>AI & 반도체</h2>
-<p>인공지능 시대의 핵심 기술</p>
-</div>
-
+<section class="hero">
+    <h2>Future of Semiconductors</h2>
+    <p>반도체 기술로 미래를 설계하다</p>
 </section>
 
-<script src="script.js"></script>
+<section id="about">
+    <h2>About</h2>
+    <p>
+        이 웹사이트는 반도체 기술과 연구에 대한 정보를 제공하기 위해 제작되었습니다.
+        반도체는 현대 전자기기의 핵심 요소로, 스마트폰, 컴퓨터, 자동차 등 다양한 분야에서 활용됩니다.
+    </p>
+</section>
+
+<section id="research">
+    <h2>Research Areas</h2>
+
+    <div class="card-container">
+        <div class="card">
+            <h3>AI 반도체</h3>
+            <p>인공지능 연산을 위한 고성능 칩 연구</p>
+        </div>
+
+        <div class="card">
+            <h3>나노 공정</h3>
+            <p>더 작은 트랜지스터 구현 기술</p>
+        </div>
+
+        <div class="card">
+            <h3>전력 반도체</h3>
+            <p>전기차 및 에너지 효율 향상 기술</p>
+        </div>
+    </div>
+</section>
+
+<section id="technology">
+    <h2>Technology</h2>
+
+    <div class="card-container">
+        <div class="card">
+            <h3>CMOS 기술</h3>
+            <p>저전력 고효율 반도체 구조</p>
+        </div>
+
+        <div class="card">
+            <h3>FinFET</h3>
+            <p>3D 구조로 성능 향상</p>
+        </div>
+
+        <div class="card">
+            <h3>GAA</h3>
+            <p>차세대 반도체 핵심 기술</p>
+        </div>
+    </div>
+</section>
+
+<section id="contact">
+    <h2>Contact</h2>
+    <p>Email: semiconductor@email.com</p>
+    <p>Phone: 010-1234-5678</p>
+</section>
+
+<footer>
+    <p>© 2026 Semiconductor Lab</p>
+</footer>
+
 </body>
 </html>
