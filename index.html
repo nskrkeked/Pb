@@ -3,28 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Semiconductor Research</title>
+<title>Semiconductor Introduction</title>
 
 <style>
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: #f5f7fa;
-    color: #333;
+    background: radial-gradient(circle at top, #020617, #000);
+    color: #e2e8f0;
 }
 
 /* 헤더 */
 header {
-    background: #0d1b2a;
-    color: white;
+    background: rgba(0,0,0,0.8);
     padding: 20px 50px;
     position: fixed;
     width: 100%;
     top: 0;
+    border-bottom: 1px solid #0ea5e9;
 }
 
 header h1 {
     display: inline;
+    color: #38bdf8;
 }
 
 nav {
@@ -35,34 +36,31 @@ nav a {
     color: white;
     margin-left: 20px;
     text-decoration: none;
-    font-weight: bold;
 }
 
 nav a:hover {
-    color: #00b4d8;
+    color: #38bdf8;
 }
 
-/* 메인 */
-section {
-    padding: 100px 50px;
-}
-
+/* 히어로 */
 .hero {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-    url('https://images.unsplash.com/photo-1581090700227-1e8a7c9a6c68');
-    background-size: cover;
-    color: white;
-    text-align: center;
     height: 100vh;
+    text-align: center;
+    padding-top: 150px;
 }
 
 .hero h2 {
     font-size: 50px;
-    margin-top: 150px;
+    color: #38bdf8;
 }
 
-.hero p {
-    font-size: 20px;
+section {
+    padding: 100px 50px;
+    border-bottom: 1px solid #1e293b;
+}
+
+h2 {
+    color: #38bdf8;
 }
 
 /* 카드 */
@@ -73,20 +71,17 @@ section {
 }
 
 .card {
-    background: white;
+    background: rgba(15,23,42,0.8);
     padding: 20px;
     flex: 1;
     min-width: 250px;
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border: 1px solid #0ea5e9;
 }
 
-/* 푸터 */
 footer {
-    background: #0d1b2a;
-    color: white;
     text-align: center;
-    padding: 20px;
+    padding: 30px;
 }
 </style>
 </head>
@@ -94,78 +89,113 @@ footer {
 <body>
 
 <header>
-    <h1>Semiconductor Lab</h1>
+    <h1>Semiconductor</h1>
     <nav>
-        <a href="#about">소개</a>
-        <a href="#research">연구</a>
-        <a href="#technology">기술</a>
-        <a href="#contact">연락</a>
+        <a href="#intro">개념</a>
+        <a href="#principle">원리</a>
+        <a href="#structure">구조</a>
+        <a href="#types">종류</a>
+        <a href="#use">활용</a>
+        <a href="#future">미래</a>
     </nav>
 </header>
 
 <section class="hero">
-    <h2>Future of Semiconductors</h2>
-    <p>반도체 기술로 미래를 설계하다</p>
+    <h2>반도체의 세계</h2>
+    <p>전자기기의 핵심, 미래 산업의 중심</p>
 </section>
 
-<section id="about">
-    <h2>About</h2>
+<section id="intro">
+    <h2>1. 반도체란?</h2>
     <p>
-        이 웹사이트는 반도체 기술과 연구에 대한 정보를 제공하기 위해 제작되었습니다.
-        반도체는 현대 전자기기의 핵심 요소로, 스마트폰, 컴퓨터, 자동차 등 다양한 분야에서 활용됩니다.
+        반도체는 전기가 흐르는 도체와 흐르지 않는 절연체의 중간 성질을 가진 물질이다.
+        대표적으로 실리콘(Si)이 있으며, 전류를 조절할 수 있는 특성을 가진다.
+    </p>
+    <p>
+        이러한 특성 덕분에 반도체는 전자기기의 핵심 부품으로 사용되며,
+        현대 사회에서 필수적인 기술이다.
     </p>
 </section>
 
-<section id="research">
-    <h2>Research Areas</h2>
-
-    <div class="card-container">
-        <div class="card">
-            <h3>AI 반도체</h3>
-            <p>인공지능 연산을 위한 고성능 칩 연구</p>
-        </div>
-
-        <div class="card">
-            <h3>나노 공정</h3>
-            <p>더 작은 트랜지스터 구현 기술</p>
-        </div>
-
-        <div class="card">
-            <h3>전력 반도체</h3>
-            <p>전기차 및 에너지 효율 향상 기술</p>
-        </div>
-    </div>
+<section id="principle">
+    <h2>2. 작동 원리</h2>
+    <p>
+        반도체는 도핑이라는 과정을 통해 전도성을 조절한다.
+        N형 반도체와 P형 반도체를 결합하면 PN 접합이 형성되고,
+        이 구조에서 전류의 흐름을 제어할 수 있다.
+    </p>
+    <p>
+        이를 통해 전류를 흐르게 하거나 차단하는 스위치 역할을 수행한다.
+    </p>
 </section>
 
-<section id="technology">
-    <h2>Technology</h2>
+<section id="structure">
+    <h2>3. 트랜지스터 구조</h2>
 
     <div class="card-container">
         <div class="card">
-            <h3>CMOS 기술</h3>
-            <p>저전력 고효율 반도체 구조</p>
+            <h3>BJT</h3>
+            <p>전류로 전류를 제어하는 구조</p>
+        </div>
+
+        <div class="card">
+            <h3>MOSFET</h3>
+            <p>전압으로 전류를 제어하는 현대 핵심 구조</p>
         </div>
 
         <div class="card">
             <h3>FinFET</h3>
             <p>3D 구조로 성능 향상</p>
         </div>
+    </div>
+</section>
+
+<section id="types">
+    <h2>4. 반도체 종류</h2>
+
+    <div class="card-container">
+        <div class="card">
+            <h3>메모리 반도체</h3>
+            <p>데이터 저장 (RAM, SSD)</p>
+        </div>
 
         <div class="card">
-            <h3>GAA</h3>
-            <p>차세대 반도체 핵심 기술</p>
+            <h3>시스템 반도체</h3>
+            <p>연산 처리 (CPU, GPU)</p>
+        </div>
+
+        <div class="card">
+            <h3>전력 반도체</h3>
+            <p>전력 제어 (전기차, 에너지)</p>
         </div>
     </div>
 </section>
 
-<section id="contact">
-    <h2>Contact</h2>
-    <p>Email: semiconductor@email.com</p>
-    <p>Phone: 010-1234-5678</p>
+<section id="use">
+    <h2>5. 활용 분야</h2>
+    <p>
+        반도체는 스마트폰, 컴퓨터, 자동차, 인공지능, 의료기기 등
+        거의 모든 산업에서 사용된다.
+    </p>
+    <p>
+        특히 AI와 자율주행 기술의 발전으로 반도체의 중요성은 더욱 커지고 있다.
+    </p>
+</section>
+
+<section id="future">
+    <h2>6. 미래 기술</h2>
+    <p>
+        반도체는 점점 더 작아지는 나노 공정으로 발전하고 있으며,
+        3nm, 2nm 기술이 개발되고 있다.
+    </p>
+    <p>
+        또한 양자 컴퓨터와 같은 새로운 기술로 확장되고 있으며,
+        미래 산업의 핵심이 될 것이다.
+    </p>
 </section>
 
 <footer>
-    <p>© 2026 Semiconductor Lab</p>
+    <p>© Semiconductor Study</p>
 </footer>
 
 </body>
