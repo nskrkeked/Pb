@@ -1,202 +1,81 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Semiconductor Introduction</title>
-
-<style>
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: radial-gradient(circle at top, #020617, #000);
-    color: #e2e8f0;
-}
-
-/* 헤더 */
-header {
-    background: rgba(0,0,0,0.8);
-    padding: 20px 50px;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    border-bottom: 1px solid #0ea5e9;
-}
-
-header h1 {
-    display: inline;
-    color: #38bdf8;
-}
-
-nav {
-    float: right;
-}
-
-nav a {
-    color: white;
-    margin-left: 20px;
-    text-decoration: none;
-}
-
-nav a:hover {
-    color: #38bdf8;
-}
-
-/* 히어로 */
-.hero {
-    height: 100vh;
-    text-align: center;
-    padding-top: 150px;
-}
-
-.hero h2 {
-    font-size: 50px;
-    color: #38bdf8;
-}
-
-section {
-    padding: 100px 50px;
-    border-bottom: 1px solid #1e293b;
-}
-
-h2 {
-    color: #38bdf8;
-}
-
-/* 카드 */
-.card-container {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.card {
-    background: rgba(15,23,42,0.8);
-    padding: 20px;
-    flex: 1;
-    min-width: 250px;
-    border-radius: 10px;
-    border: 1px solid #0ea5e9;
-}
-
-footer {
-    text-align: center;
-    padding: 30px;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering Archive</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<header>
-    <h1>Semiconductor</h1>
-    <nav>
-        <a href="#intro">개념</a>
-        <a href="#principle">원리</a>
-        <a href="#structure">구조</a>
-        <a href="#types">종류</a>
-        <a href="#use">활용</a>
-        <a href="#future">미래</a>
-    </nav>
+<div class="background-grid"></div>
+
+<header class="hero">
+  <div class="window w1">
+    <div class="title-bar"></div>
+    Engineering
+  </div>
+
+  <div class="window w2">
+    <div class="title-bar"></div>
+    Knowledge
+  </div>
+
+  <div class="window w3">
+    <div class="title-bar"></div>
+    Archive
+  </div>
+
+  <div class="hero-text">
+    <h1>Understand Engineering.</h1>
+    <p>
+      공학 개념을 쉽게 배우고  
+      더 깊이 탐구할 수 있는 지식 아카이브
+    </p>
+  </div>
 </header>
 
-<section class="hero">
-    <h2>반도체의 세계</h2>
-    <p>전자기기의 핵심, 미래 산업의 중심</p>
-</section>
+<section class="topics">
+  <h2>Main Topics</h2>
 
-<section id="intro">
-    <h2>1. 반도체란?</h2>
-    <p>
-        반도체는 전기가 흐르는 도체와 흐르지 않는 절연체의 중간 성질을 가진 물질이다.
-        대표적으로 실리콘(Si)이 있으며, 전류를 조절할 수 있는 특성을 가진다.
-    </p>
-    <p>
-        이러한 특성 덕분에 반도체는 전자기기의 핵심 부품으로 사용되며,
-        현대 사회에서 필수적인 기술이다.
-    </p>
-</section>
+  <div class="cards">
 
-<section id="principle">
-    <h2>2. 작동 원리</h2>
-    <p>
-        반도체는 도핑이라는 과정을 통해 전도성을 조절한다.
-        N형 반도체와 P형 반도체를 결합하면 PN 접합이 형성되고,
-        이 구조에서 전류의 흐름을 제어할 수 있다.
-    </p>
-    <p>
-        이를 통해 전류를 흐르게 하거나 차단하는 스위치 역할을 수행한다.
-    </p>
-</section>
-
-<section id="structure">
-    <h2>3. 트랜지스터 구조</h2>
-
-    <div class="card-container">
-        <div class="card">
-            <h3>BJT</h3>
-            <p>전류로 전류를 제어하는 구조</p>
-        </div>
-
-        <div class="card">
-            <h3>MOSFET</h3>
-            <p>전압으로 전류를 제어하는 현대 핵심 구조</p>
-        </div>
-
-        <div class="card">
-            <h3>FinFET</h3>
-            <p>3D 구조로 성능 향상</p>
-        </div>
+    <div class="card">
+      <h3>Semiconductors</h3>
+      <p>반도체 구조, 역할, 발전 과정</p>
     </div>
-</section>
 
-<section id="types">
-    <h2>4. 반도체 종류</h2>
-
-    <div class="card-container">
-        <div class="card">
-            <h3>메모리 반도체</h3>
-            <p>데이터 저장 (RAM, SSD)</p>
-        </div>
-
-        <div class="card">
-            <h3>시스템 반도체</h3>
-            <p>연산 처리 (CPU, GPU)</p>
-        </div>
-
-        <div class="card">
-            <h3>전력 반도체</h3>
-            <p>전력 제어 (전기차, 에너지)</p>
-        </div>
+    <div class="card">
+      <h3>Circuits</h3>
+      <p>회로의 원리와 응용</p>
     </div>
+
+    <div class="card">
+      <h3>AI Hardware</h3>
+      <p>AI 시대의 연산 구조</p>
+    </div>
+
+    <div class="card">
+      <h3>Materials</h3>
+      <p>신소재와 공학 기술</p>
+    </div>
+
+  </div>
 </section>
 
-<section id="use">
-    <h2>5. 활용 분야</h2>
-    <p>
-        반도체는 스마트폰, 컴퓨터, 자동차, 인공지능, 의료기기 등
-        거의 모든 산업에서 사용된다.
-    </p>
-    <p>
-        특히 AI와 자율주행 기술의 발전으로 반도체의 중요성은 더욱 커지고 있다.
-    </p>
-</section>
+<section class="resources">
+  <h2>Learning Resources</h2>
 
-<section id="future">
-    <h2>6. 미래 기술</h2>
-    <p>
-        반도체는 점점 더 작아지는 나노 공정으로 발전하고 있으며,
-        3nm, 2nm 기술이 개발되고 있다.
-    </p>
-    <p>
-        또한 양자 컴퓨터와 같은 새로운 기술로 확장되고 있으며,
-        미래 산업의 핵심이 될 것이다.
-    </p>
-</section>
+  <div class="resource-box">
+    <h3>📺 Video Learning</h3>
+    <p>추천 유튜브 강의 및 시각 자료</p>
+  </div>
 
-<footer>
-    <p>© Semiconductor Study</p>
-</footer>
+  <div class="resource-box">
+    <h3>📄 Papers & Articles</h3>
+    <p>심화 학습 자료</p>
+  </div>
+</section>
 
 </body>
 </html>
