@@ -229,3 +229,7 @@ section h2 {
 .resource:hover {
   transform: translateY(-3px);
 }
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}
