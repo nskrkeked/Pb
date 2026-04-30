@@ -276,3 +276,6 @@ section h2 {
 section {
   margin-bottom: 100px;
 }
+html {
+  scroll-behavior: smooth;
+}
