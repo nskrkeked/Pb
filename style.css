@@ -233,3 +233,46 @@ section h2 {
   text-decoration: none;
   color: inherit;
 }
+/* 전체 레이아웃 */
+.layout {
+  display: flex;
+}
+
+/* 📌 목차 */
+.toc {
+  position: fixed;
+  left: 30px;
+  top: 120px;
+  width: 200px;
+}
+
+.toc h3 {
+  margin-bottom: 15px;
+}
+
+.toc a {
+  display: block;
+  margin-bottom: 12px;
+  text-decoration: none;
+  color: black;
+  font-size: 0.95rem;
+  transition: 0.2s;
+}
+
+/* hover 효과 */
+.toc a:hover {
+  transform: translateX(6px);
+}
+
+/* 📄 본문 */
+.content {
+  margin-left: 260px;
+  max-width: 800px;
+  padding: 80px 20px;
+  line-height: 1.8;
+}
+
+/* 섹션 간격 */
+section {
+  margin-bottom: 100px;
+}
