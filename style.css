@@ -196,3 +196,36 @@ footer {
     padding: 40px;
     color: #64748b;
 }
+.content {
+  max-width: 800px;
+  margin: auto;
+  padding: 80px 20px;
+  line-height: 1.8;
+}
+
+.summary {
+  background: #fff;
+  border-left: 6px solid black;
+  padding: 15px;
+  margin: 20px 0 40px;
+  font-weight: 600;
+}
+
+section {
+  margin-bottom: 50px;
+}
+
+section h2 {
+  margin-bottom: 15px;
+}
+
+.resource {
+  border: 2px solid black;
+  padding: 15px;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+
+.resource:hover {
+  transform: translateY(-3px);
+}
