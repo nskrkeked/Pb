@@ -12,112 +12,133 @@
 <div class="background-grid"></div>
 <div class="scanline"></div>
 
-<!-- HEADER -->
-<header class="hero">
-  <div class="hero-tag">ENG_ARCHIVE / v2.0</div>
-  <div class="window w1"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Engineering</div>
-  <div class="window w2"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Knowledge</div>
-  <div class="window w3"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Archive</div>
-  <div class="hero-text">
-    <div class="hero-label">// KNOWLEDGE BASE</div>
-    <h1>Understand<br><span class="accent">Engineering.</span></h1>
-    <p>공학 개념을 쉽게 배우고<br>더 깊이 탐구할 수 있는 지식 아카이브</p>
+<!-- TOP NAV -->
+<nav class="topnav">
+  <span class="nav-logo">ENG_ARCHIVE</span>
+  <div class="nav-links">
+    <a href="topics-manage.html" class="nav-item">토픽 관리</a>
+    <a href="resources-manage.html" class="nav-item">참고자료 관리</a>
+    <a href="admin.html" class="nav-item admin-link">⚙ ADMIN</a>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<header class="hero" id="top">
+  <div class="hero-left">
+    <div class="window w1"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Engineering</div>
+    <div class="window w2"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Knowledge</div>
+    <div class="window w3"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Archive</div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-line"></span>
+      <span class="eyebrow-text">// KNOWLEDGE BASE SYSTEM</span>
+    </div>
+    <h1 class="hero-title">
+      공학을<br>
+      <span class="accent">탐구하다.</span>
+    </h1>
+    <p class="hero-sub">
+      반도체부터 AI 하드웨어까지 —<br>
+      복잡한 공학 개념을 체계적으로 정리하고<br>
+      깊이 있게 학습하는 아카이브입니다.
+    </p>
+    <div class="hero-cta-row">
+      <a href="#topics" class="btn-cta">탐색 시작 →</a>
+      <a href="#posts" class="btn-cta-ghost">최신 글 보기</a>
+    </div>
     <div class="hero-stats">
       <div class="stat"><span id="post-count">0</span><small>POSTS</small></div>
       <div class="stat-div"></div>
-      <div class="stat"><span>4</span><small>TOPICS</small></div>
+      <div class="stat"><span id="topic-count">0</span><small>TOPICS</small></div>
       <div class="stat-div"></div>
       <div class="stat"><span>∞</span><small>LEARNING</small></div>
     </div>
   </div>
 </header>
 
-<!-- TOPICS -->
-<section class="topics">
-  <div class="section-label">01 / MAIN TOPICS</div>
-  <h2>Main Topics</h2>
-  <div class="cards">
-    <a class="card card-link" href="topic.html?topic=Semiconductors">
-      <div class="card-num">01</div>
-      <h3>Semiconductors</h3>
-      <p>반도체 구조, 역할, 발전 과정</p>
-      <div class="card-arrow">→</div>
-      <div class="card-line"></div>
-    </a>
-    <a class="card card-link" href="topic.html?topic=Circuits">
-      <div class="card-num">02</div>
-      <h3>Circuits</h3>
-      <p>회로의 원리와 응용</p>
-      <div class="card-arrow">→</div>
-      <div class="card-line"></div>
-    </a>
-    <a class="card card-link" href="topic.html?topic=AI%20Hardware">
-      <div class="card-num">03</div>
-      <h3>AI Hardware</h3>
-      <p>AI 시대의 연산 구조</p>
-      <div class="card-arrow">→</div>
-      <div class="card-line"></div>
-    </a>
-    <a class="card card-link" href="topic.html?topic=Materials">
-      <div class="card-num">04</div>
-      <h3>Materials</h3>
-      <p>신소재와 공학 기술</p>
-      <div class="card-arrow">→</div>
-      <div class="card-line"></div>
-    </a>
-  </div>
-</section>
+<!-- ═══════════════ MAIN LAYOUT (TOC + CONTENT) ═══════════════ -->
+<div class="page-layout">
 
-<!-- POSTS -->
-<section class="posts-section">
-  <div class="section-label">02 / POSTS</div>
-  <div class="posts-header">
-    <h2>Archive Posts</h2>
-    <button class="btn-write" id="openModal">+ NEW POST</button>
-  </div>
-  <div class="posts-list" id="postsList">
-    <div class="empty-state" id="emptyState">
-      <span class="empty-icon">[ ]</span>
-      <p>아직 작성된 글이 없습니다.<br>첫 번째 글을 작성해보세요.</p>
+  <!-- LEFT TOC -->
+  <aside class="toc" id="toc">
+    <div class="toc-label">// 목차</div>
+    <nav class="toc-nav">
+      <a href="#topics" class="toc-link" data-section="topics">
+        <span class="toc-num">01</span>
+        <span class="toc-text">Main Topics</span>
+      </a>
+      <a href="#posts" class="toc-link" data-section="posts">
+        <span class="toc-num">02</span>
+        <span class="toc-text">Archive Posts</span>
+      </a>
+      <a href="#resources" class="toc-link" data-section="resources">
+        <span class="toc-num">03</span>
+        <span class="toc-text">Learning Resources</span>
+      </a>
+    </nav>
+    <div class="toc-progress">
+      <div class="toc-progress-bar" id="tocProgress"></div>
     </div>
-  </div>
-</section>
+  </aside>
 
-<!-- RESOURCES -->
-<section class="resources">
-  <div class="section-label">03 / LEARNING RESOURCES</div>
-  <h2>Learning Resources</h2>
-  <div class="resource-grid">
-    <div class="resource-box" id="videoResource">
-      <div class="resource-icon">📺</div>
-      <div class="resource-info">
-        <h3>Video Learning</h3>
-        <p>추천 유튜브 강의 및 시각 자료</p>
-      </div>
-      <div class="resource-links" id="videoLinks">
-        <a href="https://www.youtube.com/@3blue1brown" target="_blank" class="res-link">3Blue1Brown →</a>
-        <a href="https://www.youtube.com/@BenEater" target="_blank" class="res-link">Ben Eater →</a>
-        <a href="https://www.youtube.com/c/TwoMinutePapers" target="_blank" class="res-link">Two Minute Papers →</a>
-        <button class="btn-add-link" onclick="addLink('video')">+ 링크 추가</button>
-      </div>
-    </div>
-    <div class="resource-box" id="paperResource">
-      <div class="resource-icon">📄</div>
-      <div class="resource-info">
-        <h3>Papers & Articles</h3>
-        <p>심화 학습 자료</p>
-      </div>
-      <div class="resource-links" id="paperLinks">
-        <a href="https://arxiv.org/list/cs.AR/recent" target="_blank" class="res-link">arXiv CS.AR →</a>
-        <a href="https://ieeexplore.ieee.org/" target="_blank" class="res-link">IEEE Xplore →</a>
-        <a href="https://scholar.google.com/" target="_blank" class="res-link">Google Scholar →</a>
-        <button class="btn-add-link" onclick="addLink('paper')">+ 링크 추가</button>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- RIGHT CONTENT -->
+  <main class="main-content">
 
-<!-- WRITE MODAL -->
+    <!-- ── TOPICS ── -->
+    <section class="section" id="topics">
+      <div class="section-head">
+        <div class="section-label">01 / MAIN TOPICS</div>
+        <h2>Main Topics</h2>
+        <p class="section-desc">토픽을 선택하면 관련 글과 자료를 모아볼 수 있습니다.</p>
+      </div>
+      <div class="cards" id="topicCards"></div>
+    </section>
+
+    <!-- ── POSTS ── -->
+    <section class="section" id="posts">
+      <div class="section-head">
+        <div class="section-label">02 / POSTS</div>
+        <div class="section-head-row">
+          <div>
+            <h2>Archive Posts</h2>
+            <p class="section-desc">작성된 모든 글을 최신순으로 볼 수 있습니다.</p>
+          </div>
+          <button class="btn-write" id="openModal">+ NEW POST</button>
+        </div>
+      </div>
+      <div class="posts-list" id="postsList">
+        <div class="empty-state" id="emptyState">
+          <span class="empty-icon">[ ]</span>
+          <p>아직 작성된 글이 없습니다.<br>첫 번째 글을 작성해보세요.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── RESOURCES ── -->
+    <section class="section" id="resources">
+      <div class="section-head">
+        <div class="section-label">03 / LEARNING RESOURCES</div>
+        <div class="section-head-row">
+          <div>
+            <h2>Learning Resources</h2>
+            <p class="section-desc">학습에 도움이 되는 영상, 논문, 아티클 모음입니다.</p>
+          </div>
+          <a href="resources-manage.html" class="btn-write">+ 자료 추가</a>
+        </div>
+      </div>
+      <div class="resource-grid" id="resourceGrid">
+        <div class="empty-state">
+          <span class="empty-icon">[ ]</span>
+          <p>자료를 불러오는 중...</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div><!-- end page-layout -->
+
+<!-- ═══════════════ WRITE MODAL ═══════════════ -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-header">
@@ -131,13 +152,7 @@
       </div>
       <div class="form-group">
         <label>TOPIC</label>
-        <select id="postTopic">
-          <option value="Semiconductors">Semiconductors</option>
-          <option value="Circuits">Circuits</option>
-          <option value="AI Hardware">AI Hardware</option>
-          <option value="Materials">Materials</option>
-          <option value="기타">기타</option>
-        </select>
+        <select id="postTopic"></select>
       </div>
       <div class="form-group">
         <label>CONTENT</label>
@@ -155,163 +170,193 @@
   </div>
 </div>
 
-<!-- LINK ADD MODAL -->
-<div class="modal-overlay" id="linkModalOverlay">
-  <div class="modal modal-sm">
-    <div class="modal-header">
-      <span class="modal-title">// ADD LINK</span>
-      <button class="modal-close" id="closeLinkModal">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>LABEL</label>
-        <input type="text" id="linkLabel" placeholder="링크 이름" />
-      </div>
-      <div class="form-group">
-        <label>URL</label>
-        <input type="text" id="linkUrl" placeholder="https://..." />
-      </div>
-      <input type="hidden" id="linkType" />
-      <div class="modal-actions">
-        <button class="btn-cancel" id="cancelLinkModal">CANCEL</button>
-        <button class="btn-submit" id="submitLink">ADD →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <footer>
   <div class="footer-inner">
     <span class="footer-logo">ENG_ARCHIVE</span>
-    <span class="footer-copy">// Knowledge is the foundation of engineering.</span>
+    <span class="footer-copy">// 공학 지식은 세상을 움직이는 언어입니다.</span>
   </div>
 </footer>
 
 <script>
-  // ── POST 관리 ──
-  let posts = JSON.parse(localStorage.getItem('eng_posts') || '[]');
+// ── DATA ──
+const DEFAULT_TOPICS = [
+  { name: 'Semiconductors', desc: '반도체 구조, 역할, 발전 과정', icon: '💾' },
+  { name: 'Circuits',       desc: '회로의 원리와 응용',           icon: '⚡' },
+  { name: 'AI Hardware',    desc: 'AI 시대의 연산 구조',          icon: '🤖' },
+  { name: 'Materials',      desc: '신소재와 공학 기술',           icon: '🔬' },
+];
+const DEFAULT_RESOURCES = [
+  { type: 'video', label: '3Blue1Brown', url: 'https://www.youtube.com/@3blue1brown' },
+  { type: 'video', label: 'Ben Eater',   url: 'https://www.youtube.com/@BenEater' },
+  { type: 'video', label: 'Two Minute Papers', url: 'https://www.youtube.com/c/TwoMinutePapers' },
+  { type: 'paper', label: 'arXiv CS.AR', url: 'https://arxiv.org/list/cs.AR/recent' },
+  { type: 'paper', label: 'IEEE Xplore', url: 'https://ieeexplore.ieee.org/' },
+  { type: 'paper', label: 'Google Scholar', url: 'https://scholar.google.com/' },
+];
 
-  function updatePostCount() {
-    document.getElementById('post-count').textContent = posts.length;
-  }
+function allTopics() {
+  const custom = JSON.parse(localStorage.getItem('eng_custom_topics') || '[]');
+  return [...DEFAULT_TOPICS, ...custom];
+}
+function allResources() {
+  const custom = JSON.parse(localStorage.getItem('eng_custom_resources') || '[]');
+  return [...DEFAULT_RESOURCES, ...custom];
+}
 
-  function renderPosts() {
-    const list = document.getElementById('postsList');
-    const empty = document.getElementById('emptyState');
-    if (posts.length === 0) {
-      empty.style.display = 'flex';
-      const existing = list.querySelectorAll('.post-item');
-      existing.forEach(e => e.remove());
-    } else {
-      empty.style.display = 'none';
-      list.querySelectorAll('.post-item').forEach(e => e.remove());
-      posts.slice().reverse().forEach((post, i) => {
-        const el = document.createElement('div');
-        el.className = 'post-item';
-        el.innerHTML = `
-          <div class="post-meta">
-            <span class="post-topic">${post.topic}</span>
-            <span class="post-date">${post.date}</span>
-          </div>
-          <h3 class="post-title">${post.title}</h3>
-          <p class="post-excerpt">${post.content.substring(0, 120)}${post.content.length > 120 ? '...' : ''}</p>
-          ${post.ref ? `<a href="${post.ref}" target="_blank" class="post-ref">참고 자료 →</a>` : ''}
-          <button class="btn-delete" onclick="deletePost(${posts.length - 1 - i})">삭제</button>
-        `;
-        list.appendChild(el);
-      });
-    }
-    updatePostCount();
-  }
-
-  function deletePost(idx) {
-    if (confirm('이 글을 삭제할까요?')) {
-      posts.splice(idx, 1);
-      localStorage.setItem('eng_posts', JSON.stringify(posts));
-      renderPosts();
-    }
-  }
-
-  // ── POST 모달 ──
-  const modalOverlay = document.getElementById('modalOverlay');
-  document.getElementById('openModal').addEventListener('click', () => {
-    modalOverlay.classList.add('active');
+// ── TOPIC CARDS ──
+function renderTopicCards() {
+  const topics = allTopics();
+  const container = document.getElementById('topicCards');
+  container.innerHTML = '';
+  topics.forEach((t, i) => {
+    const a = document.createElement('a');
+    a.className = 'card card-link';
+    a.href = `topic.html?topic=${encodeURIComponent(t.name)}`;
+    a.innerHTML = `
+      <div class="card-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="card-icon-sm">${t.icon||'📁'}</div>
+      <h3>${t.name}</h3>
+      <p>${t.desc}</p>
+      <div class="card-arrow">→</div>
+      <div class="card-line"></div>
+    `;
+    container.appendChild(a);
   });
-  document.getElementById('closeModal').addEventListener('click', closePostModal);
-  document.getElementById('cancelModal').addEventListener('click', closePostModal);
-  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closePostModal(); });
-
-  function closePostModal() {
-    modalOverlay.classList.remove('active');
-    document.getElementById('postTitle').value = '';
-    document.getElementById('postContent').value = '';
-    document.getElementById('postRef').value = '';
-  }
-
-  document.getElementById('submitPost').addEventListener('click', () => {
-    const title = document.getElementById('postTitle').value.trim();
-    const topic = document.getElementById('postTopic').value;
-    const content = document.getElementById('postContent').value.trim();
-    const ref = document.getElementById('postRef').value.trim();
-    if (!title || !content) { alert('제목과 내용을 입력해주세요.'); return; }
-    const now = new Date();
-    const date = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
-    posts.push({ title, topic, content, ref, date });
-    localStorage.setItem('eng_posts', JSON.stringify(posts));
-    renderPosts();
-    closePostModal();
+  document.getElementById('topic-count').textContent = topics.length;
+  // select sync
+  const sel = document.getElementById('postTopic');
+  sel.innerHTML = '';
+  topics.forEach(t => {
+    const o = document.createElement('option');
+    o.value = t.name; o.textContent = t.name; sel.appendChild(o);
   });
+}
 
-  // ── LINK 관리 ──
-  let customLinks = JSON.parse(localStorage.getItem('eng_links') || '{"video":[],"paper":[]}');
+// ── RESOURCES ──
+function renderResources() {
+  const resources = allResources();
+  const grid = document.getElementById('resourceGrid');
+  grid.innerHTML = '';
+  const videoBox = createResourceBox('📺', 'Video Learning', '추천 유튜브 강의 및 시각 자료', resources.filter(r => r.type==='video'));
+  const paperBox = createResourceBox('📄', 'Papers & Articles', '심화 학습 논문 및 아티클', resources.filter(r => r.type==='paper'));
+  grid.appendChild(videoBox);
+  grid.appendChild(paperBox);
+}
+function createResourceBox(icon, title, desc, links) {
+  const box = document.createElement('div');
+  box.className = 'resource-box';
+  box.innerHTML = `
+    <div class="resource-icon">${icon}</div>
+    <div class="resource-info"><h3>${title}</h3><p>${desc}</p></div>
+    <div class="resource-links">
+      ${links.map(l => `<a href="${l.url}" target="_blank" class="res-link">${l.label} →</a>`).join('')}
+      ${links.length === 0 ? '<span class="res-empty">자료가 없습니다.</span>' : ''}
+    </div>
+  `;
+  return box;
+}
 
-  function renderCustomLinks() {
-    ['video','paper'].forEach(type => {
-      const container = document.getElementById(type + 'Links');
-      container.querySelectorAll('.custom-link').forEach(e => e.remove());
-      const btn = container.querySelector('.btn-add-link');
-      customLinks[type].forEach((link, i) => {
-        const a = document.createElement('a');
-        a.href = link.url;
-        a.target = '_blank';
-        a.className = 'res-link custom-link';
-        a.innerHTML = `${link.label} →`;
-        container.insertBefore(a, btn);
-      });
+// ── POSTS ──
+let posts = JSON.parse(localStorage.getItem('eng_posts') || '[]');
+
+function renderPosts() {
+  const list = document.getElementById('postsList');
+  const empty = document.getElementById('emptyState');
+  list.querySelectorAll('.post-item').forEach(e => e.remove());
+  if (posts.length === 0) { empty.style.display = 'flex'; }
+  else {
+    empty.style.display = 'none';
+    posts.slice().reverse().forEach((post, i) => {
+      const el = document.createElement('div');
+      el.className = 'post-item';
+      el.innerHTML = `
+        <div class="post-meta">
+          <span class="post-topic">${post.topic}</span>
+          <span class="post-date">${post.date}</span>
+        </div>
+        <h3 class="post-title">${post.title}</h3>
+        <p class="post-excerpt">${post.content.substring(0,120)}${post.content.length>120?'...':''}</p>
+        <div class="post-footer-row">
+          ${post.ref?`<a href="${post.ref}" target="_blank" class="post-ref">참고 자료 →</a>`:'<span></span>'}
+          <button class="btn-delete" onclick="deletePost(${posts.length-1-i})">삭제</button>
+        </div>
+      `;
+      list.appendChild(el);
     });
   }
-
-  function addLink(type) {
-    document.getElementById('linkType').value = type;
-    document.getElementById('linkModalOverlay').classList.add('active');
+  document.getElementById('post-count').textContent = posts.length;
+}
+function deletePost(idx) {
+  if (confirm('이 글을 삭제할까요?')) {
+    posts.splice(idx, 1);
+    localStorage.setItem('eng_posts', JSON.stringify(posts));
+    renderPosts();
   }
+}
 
-  document.getElementById('closeLinkModal').addEventListener('click', closeLinkModal);
-  document.getElementById('cancelLinkModal').addEventListener('click', closeLinkModal);
-  document.getElementById('linkModalOverlay').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('linkModalOverlay')) closeLinkModal();
-  });
-
-  function closeLinkModal() {
-    document.getElementById('linkModalOverlay').classList.remove('active');
-    document.getElementById('linkLabel').value = '';
-    document.getElementById('linkUrl').value = '';
-  }
-
-  document.getElementById('submitLink').addEventListener('click', () => {
-    const label = document.getElementById('linkLabel').value.trim();
-    const url = document.getElementById('linkUrl').value.trim();
-    const type = document.getElementById('linkType').value;
-    if (!label || !url) { alert('이름과 URL을 입력해주세요.'); return; }
-    customLinks[type].push({ label, url });
-    localStorage.setItem('eng_links', JSON.stringify(customLinks));
-    renderCustomLinks();
-    closeLinkModal();
-  });
-
-  // ── INIT ──
+// ── POST MODAL ──
+const modalOverlay = document.getElementById('modalOverlay');
+document.getElementById('openModal').addEventListener('click', () => modalOverlay.classList.add('active'));
+document.getElementById('closeModal').addEventListener('click', closePostModal);
+document.getElementById('cancelModal').addEventListener('click', closePostModal);
+modalOverlay.addEventListener('click', e => { if (e.target===modalOverlay) closePostModal(); });
+function closePostModal() {
+  modalOverlay.classList.remove('active');
+  ['postTitle','postContent','postRef'].forEach(id => document.getElementById(id).value = '');
+}
+document.getElementById('submitPost').addEventListener('click', () => {
+  const title   = document.getElementById('postTitle').value.trim();
+  const topic   = document.getElementById('postTopic').value;
+  const content = document.getElementById('postContent').value.trim();
+  const ref     = document.getElementById('postRef').value.trim();
+  if (!title || !content) { alert('제목과 내용을 입력해주세요.'); return; }
+  const now = new Date();
+  const date = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+  posts.push({ title, topic, content, ref, date });
+  localStorage.setItem('eng_posts', JSON.stringify(posts));
   renderPosts();
-  renderCustomLinks();
+  closePostModal();
+});
+
+// ── TOC ACTIVE + PROGRESS ──
+const sections = ['topics','posts','resources'];
+function updateToc() {
+  const scrollY = window.scrollY;
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('tocProgress').style.height = `${(scrollY/docH)*100}%`;
+
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 140) current = id;
+  });
+  document.querySelectorAll('.toc-link').forEach(a => {
+    a.classList.toggle('active', a.dataset.section === current);
+  });
+
+  // show/hide TOC after hero
+  const hero = document.getElementById('top');
+  const toc  = document.getElementById('toc');
+  if (hero) toc.classList.toggle('toc-visible', scrollY > hero.offsetHeight - 100);
+}
+window.addEventListener('scroll', updateToc, { passive: true });
+updateToc();
+
+// ── SMOOTH SCROLL for TOC links ──
+document.querySelectorAll('.toc-link, a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (!href.startsWith('#')) return;
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// ── INIT ──
+renderTopicCards();
+renderPosts();
+renderResources();
 </script>
 </body>
 </html>
