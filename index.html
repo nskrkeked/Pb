@@ -64,7 +64,7 @@
   <aside class="toc" id="toc">
     <div class="toc-label">// 목차</div>
     <nav class="toc-nav">
-      <a href="#topics" class="toc-link" data-section="topics">
+      <a href="#topics" class="toc-link active" data-section="topics">
         <span class="toc-num">01</span>
         <span class="toc-text">Main Topics</span>
       </a>
@@ -124,7 +124,6 @@
             <h2>Learning Resources</h2>
             <p class="section-desc">학습에 도움이 되는 영상, 논문, 아티클 모음입니다.</p>
           </div>
-          <a href="resources-manage.html" class="btn-write">+ 자료 추가</a>
         </div>
       </div>
       <div class="resource-grid" id="resourceGrid">
@@ -242,18 +241,61 @@ function renderResources() {
   grid.appendChild(videoBox);
   grid.appendChild(paperBox);
 }
+
 function createResourceBox(icon, title, desc, links) {
   const box = document.createElement('div');
   box.className = 'resource-box';
+  let linksHtml = links.map((l, idx) => `
+    <a href="${l.url}" target="_blank" class="res-link">
+      ${l.label} →
+      <button class="res-link-delete" onclick="deleteResource(${DEFAULT_RESOURCES.length + (allResources().indexOf(l) - DEFAULT_RESOURCES.length)})" title="삭제">✕</button>
+    </a>
+  `).join('');
+  
   box.innerHTML = `
     <div class="resource-icon">${icon}</div>
     <div class="resource-info"><h3>${title}</h3><p>${desc}</p></div>
     <div class="resource-links">
-      ${links.map(l => `<a href="${l.url}" target="_blank" class="res-link">${l.label} →</a>`).join('')}
-      ${links.length === 0 ? '<span class="res-empty">자료가 없습니다.</span>' : ''}
+      ${linksHtml || '<span class="res-empty">자료가 없습니다.</span>'}
+    </div>
+    <div class="resource-add-form">
+      <div class="resource-input-row">
+        <input type="text" class="resource-add-input" placeholder="자료 이름" data-type="${links[0]?.type || (title.includes('Video') ? 'video' : 'paper')}" />
+        <input type="text" class="resource-add-input" placeholder="https://..." style="flex: 1.5;" />
+        <button class="resource-add-btn" onclick="addResource(this)">추가</button>
+      </div>
     </div>
   `;
   return box;
+}
+
+function addResource(btn) {
+  const row = btn.parentElement;
+  const inputs = row.querySelectorAll('.resource-add-input');
+  const label = inputs[0].value.trim();
+  const url = inputs[1].value.trim();
+  const type = inputs[0].dataset.type;
+  
+  if (!label || !url) { alert('이름과 URL을 입력해주세요.'); return; }
+  if (!url.startsWith('http')) { alert('유효한 URL을 입력해주세요.'); return; }
+  
+  const custom = JSON.parse(localStorage.getItem('eng_custom_resources') || '[]');
+  custom.push({ type, label, url });
+  localStorage.setItem('eng_custom_resources', JSON.stringify(custom));
+  
+  inputs[0].value = '';
+  inputs[1].value = '';
+  renderResources();
+}
+
+function deleteResource(idx) {
+  const custom = JSON.parse(localStorage.getItem('eng_custom_resources') || '[]');
+  const customIdx = idx - DEFAULT_RESOURCES.length;
+  if (customIdx >= 0 && customIdx < custom.length) {
+    custom.splice(customIdx, 1);
+    localStorage.setItem('eng_custom_resources', JSON.stringify(custom));
+    renderResources();
+  }
 }
 
 // ── POSTS ──
@@ -269,6 +311,7 @@ function renderPosts() {
     posts.slice().reverse().forEach((post, i) => {
       const el = document.createElement('div');
       el.className = 'post-item';
+      const actualIdx = posts.length - 1 - i;
       el.innerHTML = `
         <div class="post-meta">
           <span class="post-topic">${post.topic}</span>
@@ -278,7 +321,7 @@ function renderPosts() {
         <p class="post-excerpt">${post.content.substring(0,120)}${post.content.length>120?'...':''}</p>
         <div class="post-footer-row">
           ${post.ref?`<a href="${post.ref}" target="_blank" class="post-ref">참고 자료 →</a>`:'<span></span>'}
-          <button class="btn-delete" onclick="deletePost(${posts.length-1-i})">삭제</button>
+          <button class="btn-delete" onclick="deletePost(${actualIdx})">삭제</button>
         </div>
       `;
       list.appendChild(el);
@@ -286,8 +329,9 @@ function renderPosts() {
   }
   document.getElementById('post-count').textContent = posts.length;
 }
+
 function deletePost(idx) {
-  if (confirm('이 글을 삭제할까요?')) {
+  if (confirm('이 글을 삭제하시겠습니까?')) {
     posts.splice(idx, 1);
     localStorage.setItem('eng_posts', JSON.stringify(posts));
     renderPosts();
@@ -300,10 +344,12 @@ document.getElementById('openModal').addEventListener('click', () => modalOverla
 document.getElementById('closeModal').addEventListener('click', closePostModal);
 document.getElementById('cancelModal').addEventListener('click', closePostModal);
 modalOverlay.addEventListener('click', e => { if (e.target===modalOverlay) closePostModal(); });
+
 function closePostModal() {
   modalOverlay.classList.remove('active');
   ['postTitle','postContent','postRef'].forEach(id => document.getElementById(id).value = '');
 }
+
 document.getElementById('submitPost').addEventListener('click', () => {
   const title   = document.getElementById('postTitle').value.trim();
   const topic   = document.getElementById('postTopic').value;
@@ -333,11 +379,6 @@ function updateToc() {
   document.querySelectorAll('.toc-link').forEach(a => {
     a.classList.toggle('active', a.dataset.section === current);
   });
-
-  // show/hide TOC after hero
-  const hero = document.getElementById('top');
-  const toc  = document.getElementById('toc');
-  if (hero) toc.classList.toggle('toc-visible', scrollY > hero.offsetHeight - 100);
 }
 window.addEventListener('scroll', updateToc, { passive: true });
 updateToc();
