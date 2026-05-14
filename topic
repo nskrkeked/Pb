@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Topic — Engineering Archive</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="background-grid"></div>
+<div class="scanline"></div>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a href="index.html" class="nav-back">← ENG_ARCHIVE</a>
+  <div class="nav-breadcrumb">
+    <span>MAIN TOPICS</span>
+    <span class="nav-sep">/</span>
+    <span id="navTopic" class="nav-current">—</span>
+  </div>
+</nav>
+
+<!-- TOPIC HERO -->
+<header class="topic-hero">
+  <div class="topic-hero-inner">
+    <div class="hero-label" id="topicNum">// TOPIC 00</div>
+    <h1 id="topicTitle">—</h1>
+    <p id="topicDesc" class="topic-desc">—</p>
+    <div class="topic-stats">
+      <div class="stat"><span id="topicPostCount">0</span><small>POSTS</small></div>
+    </div>
+  </div>
+</header>
+
+<!-- POSTS -->
+<section class="topic-posts">
+  <div class="posts-header">
+    <div>
+      <div class="section-label">POSTS IN THIS TOPIC</div>
+      <h2>Archive Posts</h2>
+    </div>
+    <button class="btn-write" id="openModal">+ NEW POST</button>
+  </div>
+  <div class="posts-list" id="postsList">
+    <div class="empty-state" id="emptyState">
+      <span class="empty-icon">[ ]</span>
+      <p>이 토픽에 작성된 글이 없습니다.<br>첫 번째 글을 작성해보세요.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WRITE MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">// NEW POST</span>
+      <button class="modal-close" id="closeModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>TITLE</label>
+        <input type="text" id="postTitle" placeholder="글 제목을 입력하세요" />
+      </div>
+      <div class="form-group">
+        <label>TOPIC</label>
+        <select id="postTopic">
+          <option value="Semiconductors">Semiconductors</option>
+          <option value="Circuits">Circuits</option>
+          <option value="AI Hardware">AI Hardware</option>
+          <option value="Materials">Materials</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>CONTENT</label>
+        <textarea id="postContent" placeholder="내용을 작성하세요..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>REFERENCE URL (선택)</label>
+        <input type="text" id="postRef" placeholder="https://..." />
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelModal">CANCEL</button>
+        <button class="btn-submit" id="submitPost">PUBLISH →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POST DETAIL MODAL -->
+<div class="modal-overlay" id="detailOverlay">
+  <div class="modal modal-detail">
+    <div class="modal-header">
+      <span class="modal-title" id="detailTopic">—</span>
+      <button class="modal-close" id="closeDetail">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-date" id="detailDate">—</div>
+      <h2 class="detail-title" id="detailTitle">—</h2>
+      <div class="detail-content" id="detailContent">—</div>
+      <a class="post-ref" id="detailRef" href="#" target="_blank" style="display:none">참고 자료 →</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">ENG_ARCHIVE</span>
+    <span class="footer-copy">// Knowledge is the foundation of engineering.</span>
+  </div>
+</footer>
+
+<script>
+  const TOPIC_META = {
+    'Semiconductors': { num: '01', desc: '반도체 구조, 역할, 발전 과정' },
+    'Circuits':       { num: '02', desc: '회로의 원리와 응용' },
+    'AI Hardware':    { num: '03', desc: 'AI 시대의 연산 구조' },
+    'Materials':      { num: '04', desc: '신소재와 공학 기술' },
+  };
+
+  // URL에서 topic 파라미터 읽기
+  const params = new URLSearchParams(location.search);
+  const currentTopic = params.get('topic') || 'Semiconductors';
+  const meta = TOPIC_META[currentTopic] || { num: '00', desc: '' };
+
+  // 헤더 세팅
+  document.title = `${currentTopic} — Engineering Archive`;
+  document.getElementById('navTopic').textContent = currentTopic;
+  document.getElementById('topicNum').textContent = `// TOPIC ${meta.num}`;
+  document.getElementById('topicTitle').textContent = currentTopic;
+  document.getElementById('topicDesc').textContent = meta.desc;
+
+  // 현재 토픽을 select 기본값으로
+  const sel = document.getElementById('postTopic');
+  for (let opt of sel.options) { if (opt.value === currentTopic) opt.selected = true; }
+
+  // ── POST 관리 ──
+  let posts = JSON.parse(localStorage.getItem('eng_posts') || '[]');
+
+  function topicPosts() {
+    return posts.map((p, i) => ({ ...p, _idx: i })).filter(p => p.topic === currentTopic);
+  }
+
+  function updateCount() {
+    document.getElementById('topicPostCount').textContent = topicPosts().length;
+  }
+
+  function renderPosts() {
+    const list = document.getElementById('postsList');
+    const empty = document.getElementById('emptyState');
+    list.querySelectorAll('.post-item').forEach(e => e.remove());
+
+    const filtered = topicPosts().slice().reverse();
+    if (filtered.length === 0) {
+      empty.style.display = 'flex';
+    } else {
+      empty.style.display = 'none';
+      filtered.forEach(post => {
+        const el = document.createElement('div');
+        el.className = 'post-item post-item-clickable';
+        el.innerHTML = `
+          <div class="post-meta">
+            <span class="post-topic">${post.topic}</span>
+            <span class="post-date">${post.date}</span>
+          </div>
+          <h3 class="post-title">${post.title}</h3>
+          <p class="post-excerpt">${post.content.substring(0, 140)}${post.content.length > 140 ? '...' : ''}</p>
+          <div class="post-footer-row">
+            ${post.ref ? `<a href="${post.ref}" target="_blank" class="post-ref" onclick="event.stopPropagation()">참고 자료 →</a>` : '<span></span>'}
+            <button class="btn-delete" onclick="event.stopPropagation(); deletePost(${post._idx})">삭제</button>
+          </div>
+        `;
+        el.addEventListener('click', () => openDetail(post));
+        list.appendChild(el);
+      });
+    }
+    updateCount();
+  }
+
+  function openDetail(post) {
+    document.getElementById('detailTopic').textContent = `// ${post.topic}`;
+    document.getElementById('detailDate').textContent = post.date;
+    document.getElementById('detailTitle').textContent = post.title;
+    document.getElementById('detailContent').textContent = post.content;
+    const refEl = document.getElementById('detailRef');
+    if (post.ref) { refEl.href = post.ref; refEl.style.display = 'inline-block'; }
+    else { refEl.style.display = 'none'; }
+    document.getElementById('detailOverlay').classList.add('active');
+  }
+
+  document.getElementById('closeDetail').addEventListener('click', () => {
+    document.getElementById('detailOverlay').classList.remove('active');
+  });
+  document.getElementById('detailOverlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('detailOverlay'))
+      document.getElementById('detailOverlay').classList.remove('active');
+  });
+
+  function deletePost(idx) {
+    if (confirm('이 글을 삭제할까요?')) {
+      posts.splice(idx, 1);
+      localStorage.setItem('eng_posts', JSON.stringify(posts));
+      renderPosts();
+    }
+  }
+
+  // ── POST 모달 ──
+  const modalOverlay = document.getElementById('modalOverlay');
+  document.getElementById('openModal').addEventListener('click', () => modalOverlay.classList.add('active'));
+  document.getElementById('closeModal').addEventListener('click', closePostModal);
+  document.getElementById('cancelModal').addEventListener('click', closePostModal);
+  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closePostModal(); });
+
+  function closePostModal() {
+    modalOverlay.classList.remove('active');
+    document.getElementById('postTitle').value = '';
+    document.getElementById('postContent').value = '';
+    document.getElementById('postRef').value = '';
+  }
+
+  document.getElementById('submitPost').addEventListener('click', () => {
+    const title = document.getElementById('postTitle').value.trim();
+    const topic = document.getElementById('postTopic').value;
+    const content = document.getElementById('postContent').value.trim();
+    const ref = document.getElementById('postRef').value.trim();
+    if (!title || !content) { alert('제목과 내용을 입력해주세요.'); return; }
+    const now = new Date();
+    const date = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+    posts.push({ title, topic, content, ref, date });
+    localStorage.setItem('eng_posts', JSON.stringify(posts));
+    renderPosts();
+    closePostModal();
+  });
+
+  // ── INIT ──
+  renderPosts();
+</script>
+</body>
+</html>
