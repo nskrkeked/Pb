@@ -56,6 +56,10 @@ body {
 .hero {
   height: 100vh;
   position: relative;
+    display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
   padding: 60px;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
@@ -813,9 +817,4 @@ footer {
   .topic-hero h1 { font-size: 2.8rem; }
   .topic-posts { padding: 50px 24px; }
   .topic-posts .posts-header { flex-direction: column; align-items: flex-start; gap: 16px; }
-}
-.main-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  position: relative;
 }
