@@ -5,77 +5,309 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Engineering Archive</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-
 <div class="background-grid"></div>
+<div class="scanline"></div>
 
+<!-- HEADER -->
 <header class="hero">
-  <div class="window w1">
-    <div class="title-bar"></div>
-    Engineering
-  </div>
-
-  <div class="window w2">
-    <div class="title-bar"></div>
-    Knowledge
-  </div>
-
-  <div class="window w3">
-    <div class="title-bar"></div>
-    Archive
-  </div>
-
+  <div class="hero-tag">ENG_ARCHIVE / v2.0</div>
+  <div class="window w1"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Engineering</div>
+  <div class="window w2"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Knowledge</div>
+  <div class="window w3"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Archive</div>
   <div class="hero-text">
-    <h1>Understand Engineering.</h1>
-    <p>
-      공학 개념을 쉽게 배우고  
-      더 깊이 탐구할 수 있는 지식 아카이브
-    </p>
+    <div class="hero-label">// KNOWLEDGE BASE</div>
+    <h1>Understand<br><span class="accent">Engineering.</span></h1>
+    <p>공학 개념을 쉽게 배우고<br>더 깊이 탐구할 수 있는 지식 아카이브</p>
+    <div class="hero-stats">
+      <div class="stat"><span id="post-count">0</span><small>POSTS</small></div>
+      <div class="stat-div"></div>
+      <div class="stat"><span>4</span><small>TOPICS</small></div>
+      <div class="stat-div"></div>
+      <div class="stat"><span>∞</span><small>LEARNING</small></div>
+    </div>
   </div>
 </header>
 
+<!-- TOPICS -->
 <section class="topics">
+  <div class="section-label">01 / MAIN TOPICS</div>
   <h2>Main Topics</h2>
-
   <div class="cards">
-
-   <div class="card">
-  <h3>Semiconductors</h3>
-  <p>반도체 구조, 역할, 발전 과정</p>
-</div>
-
-    <div class="card">
+    <div class="card" data-topic="Semiconductors">
+      <div class="card-num">01</div>
+      <h3>Semiconductors</h3>
+      <p>반도체 구조, 역할, 발전 과정</p>
+      <div class="card-line"></div>
+    </div>
+    <div class="card" data-topic="Circuits">
+      <div class="card-num">02</div>
       <h3>Circuits</h3>
       <p>회로의 원리와 응용</p>
+      <div class="card-line"></div>
     </div>
-
-    <div class="card">
+    <div class="card" data-topic="AI Hardware">
+      <div class="card-num">03</div>
       <h3>AI Hardware</h3>
       <p>AI 시대의 연산 구조</p>
+      <div class="card-line"></div>
     </div>
-
-    <div class="card">
+    <div class="card" data-topic="Materials">
+      <div class="card-num">04</div>
       <h3>Materials</h3>
       <p>신소재와 공학 기술</p>
+      <div class="card-line"></div>
     </div>
-
   </div>
 </section>
 
+<!-- POSTS -->
+<section class="posts-section">
+  <div class="section-label">02 / POSTS</div>
+  <div class="posts-header">
+    <h2>Archive Posts</h2>
+    <button class="btn-write" id="openModal">+ NEW POST</button>
+  </div>
+  <div class="posts-list" id="postsList">
+    <div class="empty-state" id="emptyState">
+      <span class="empty-icon">[ ]</span>
+      <p>아직 작성된 글이 없습니다.<br>첫 번째 글을 작성해보세요.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
 <section class="resources">
+  <div class="section-label">03 / LEARNING RESOURCES</div>
   <h2>Learning Resources</h2>
-
-  <div class="resource-box">
-    <h3>📺 Video Learning</h3>
-    <p>추천 유튜브 강의 및 시각 자료</p>
-  </div>
-
-  <div class="resource-box">
-    <h3>📄 Papers & Articles</h3>
-    <p>심화 학습 자료</p>
+  <div class="resource-grid">
+    <div class="resource-box" id="videoResource">
+      <div class="resource-icon">📺</div>
+      <div class="resource-info">
+        <h3>Video Learning</h3>
+        <p>추천 유튜브 강의 및 시각 자료</p>
+      </div>
+      <div class="resource-links" id="videoLinks">
+        <a href="https://www.youtube.com/@3blue1brown" target="_blank" class="res-link">3Blue1Brown →</a>
+        <a href="https://www.youtube.com/@BenEater" target="_blank" class="res-link">Ben Eater →</a>
+        <a href="https://www.youtube.com/c/TwoMinutePapers" target="_blank" class="res-link">Two Minute Papers →</a>
+        <button class="btn-add-link" onclick="addLink('video')">+ 링크 추가</button>
+      </div>
+    </div>
+    <div class="resource-box" id="paperResource">
+      <div class="resource-icon">📄</div>
+      <div class="resource-info">
+        <h3>Papers & Articles</h3>
+        <p>심화 학습 자료</p>
+      </div>
+      <div class="resource-links" id="paperLinks">
+        <a href="https://arxiv.org/list/cs.AR/recent" target="_blank" class="res-link">arXiv CS.AR →</a>
+        <a href="https://ieeexplore.ieee.org/" target="_blank" class="res-link">IEEE Xplore →</a>
+        <a href="https://scholar.google.com/" target="_blank" class="res-link">Google Scholar →</a>
+        <button class="btn-add-link" onclick="addLink('paper')">+ 링크 추가</button>
+      </div>
+    </div>
   </div>
 </section>
 
+<!-- WRITE MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">// NEW POST</span>
+      <button class="modal-close" id="closeModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>TITLE</label>
+        <input type="text" id="postTitle" placeholder="글 제목을 입력하세요" />
+      </div>
+      <div class="form-group">
+        <label>TOPIC</label>
+        <select id="postTopic">
+          <option value="Semiconductors">Semiconductors</option>
+          <option value="Circuits">Circuits</option>
+          <option value="AI Hardware">AI Hardware</option>
+          <option value="Materials">Materials</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>CONTENT</label>
+        <textarea id="postContent" placeholder="내용을 작성하세요..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>REFERENCE URL (선택)</label>
+        <input type="text" id="postRef" placeholder="https://..." />
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelModal">CANCEL</button>
+        <button class="btn-submit" id="submitPost">PUBLISH →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LINK ADD MODAL -->
+<div class="modal-overlay" id="linkModalOverlay">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <span class="modal-title">// ADD LINK</span>
+      <button class="modal-close" id="closeLinkModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>LABEL</label>
+        <input type="text" id="linkLabel" placeholder="링크 이름" />
+      </div>
+      <div class="form-group">
+        <label>URL</label>
+        <input type="text" id="linkUrl" placeholder="https://..." />
+      </div>
+      <input type="hidden" id="linkType" />
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelLinkModal">CANCEL</button>
+        <button class="btn-submit" id="submitLink">ADD →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">ENG_ARCHIVE</span>
+    <span class="footer-copy">// Knowledge is the foundation of engineering.</span>
+  </div>
+</footer>
+
+<script>
+  // ── POST 관리 ──
+  let posts = JSON.parse(localStorage.getItem('eng_posts') || '[]');
+
+  function updatePostCount() {
+    document.getElementById('post-count').textContent = posts.length;
+  }
+
+  function renderPosts() {
+    const list = document.getElementById('postsList');
+    const empty = document.getElementById('emptyState');
+    if (posts.length === 0) {
+      empty.style.display = 'flex';
+      const existing = list.querySelectorAll('.post-item');
+      existing.forEach(e => e.remove());
+    } else {
+      empty.style.display = 'none';
+      list.querySelectorAll('.post-item').forEach(e => e.remove());
+      posts.slice().reverse().forEach((post, i) => {
+        const el = document.createElement('div');
+        el.className = 'post-item';
+        el.innerHTML = `
+          <div class="post-meta">
+            <span class="post-topic">${post.topic}</span>
+            <span class="post-date">${post.date}</span>
+          </div>
+          <h3 class="post-title">${post.title}</h3>
+          <p class="post-excerpt">${post.content.substring(0, 120)}${post.content.length > 120 ? '...' : ''}</p>
+          ${post.ref ? `<a href="${post.ref}" target="_blank" class="post-ref">참고 자료 →</a>` : ''}
+          <button class="btn-delete" onclick="deletePost(${posts.length - 1 - i})">삭제</button>
+        `;
+        list.appendChild(el);
+      });
+    }
+    updatePostCount();
+  }
+
+  function deletePost(idx) {
+    if (confirm('이 글을 삭제할까요?')) {
+      posts.splice(idx, 1);
+      localStorage.setItem('eng_posts', JSON.stringify(posts));
+      renderPosts();
+    }
+  }
+
+  // ── POST 모달 ──
+  const modalOverlay = document.getElementById('modalOverlay');
+  document.getElementById('openModal').addEventListener('click', () => {
+    modalOverlay.classList.add('active');
+  });
+  document.getElementById('closeModal').addEventListener('click', closePostModal);
+  document.getElementById('cancelModal').addEventListener('click', closePostModal);
+  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closePostModal(); });
+
+  function closePostModal() {
+    modalOverlay.classList.remove('active');
+    document.getElementById('postTitle').value = '';
+    document.getElementById('postContent').value = '';
+    document.getElementById('postRef').value = '';
+  }
+
+  document.getElementById('submitPost').addEventListener('click', () => {
+    const title = document.getElementById('postTitle').value.trim();
+    const topic = document.getElementById('postTopic').value;
+    const content = document.getElementById('postContent').value.trim();
+    const ref = document.getElementById('postRef').value.trim();
+    if (!title || !content) { alert('제목과 내용을 입력해주세요.'); return; }
+    const now = new Date();
+    const date = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+    posts.push({ title, topic, content, ref, date });
+    localStorage.setItem('eng_posts', JSON.stringify(posts));
+    renderPosts();
+    closePostModal();
+  });
+
+  // ── LINK 관리 ──
+  let customLinks = JSON.parse(localStorage.getItem('eng_links') || '{"video":[],"paper":[]}');
+
+  function renderCustomLinks() {
+    ['video','paper'].forEach(type => {
+      const container = document.getElementById(type + 'Links');
+      container.querySelectorAll('.custom-link').forEach(e => e.remove());
+      const btn = container.querySelector('.btn-add-link');
+      customLinks[type].forEach((link, i) => {
+        const a = document.createElement('a');
+        a.href = link.url;
+        a.target = '_blank';
+        a.className = 'res-link custom-link';
+        a.innerHTML = `${link.label} →`;
+        container.insertBefore(a, btn);
+      });
+    });
+  }
+
+  function addLink(type) {
+    document.getElementById('linkType').value = type;
+    document.getElementById('linkModalOverlay').classList.add('active');
+  }
+
+  document.getElementById('closeLinkModal').addEventListener('click', closeLinkModal);
+  document.getElementById('cancelLinkModal').addEventListener('click', closeLinkModal);
+  document.getElementById('linkModalOverlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('linkModalOverlay')) closeLinkModal();
+  });
+
+  function closeLinkModal() {
+    document.getElementById('linkModalOverlay').classList.remove('active');
+    document.getElementById('linkLabel').value = '';
+    document.getElementById('linkUrl').value = '';
+  }
+
+  document.getElementById('submitLink').addEventListener('click', () => {
+    const label = document.getElementById('linkLabel').value.trim();
+    const url = document.getElementById('linkUrl').value.trim();
+    const type = document.getElementById('linkType').value;
+    if (!label || !url) { alert('이름과 URL을 입력해주세요.'); return; }
+    customLinks[type].push({ label, url });
+    localStorage.setItem('eng_links', JSON.stringify(customLinks));
+    renderCustomLinks();
+    closeLinkModal();
+  });
+
+  // ── INIT ──
+  renderPosts();
+  renderCustomLinks();
+</script>
 </body>
 </html>
