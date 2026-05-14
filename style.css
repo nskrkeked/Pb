@@ -84,6 +84,17 @@ min-height: 500px;
   flex-direction: column;
   justify-content: center;
 }
+.hero {
+  gap: 120px;
+}
+@media (max-width: 1024px) {
+  .hero-right {
+    padding-left: 0;
+  }
+  .hero {
+    gap: 40px;
+  }
+}
 
 .hero-tag {
   font-family: var(--mono);
