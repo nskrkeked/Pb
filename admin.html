@@ -532,31 +532,55 @@ function renderPosts() {
     posts.slice().reverse().forEach((post, ri) => {
       const realIdx = posts.length-1-ri;
       const el = document.createElement('div');
-      el.className = 'post-item';
+      el.className = 'post-item post-item-expandable';
       el.innerHTML = `
-        <div class="post-meta">
-          <span class="post-topic">${post.topic}</span>
-          <span class="post-date">${post.date}</span>
-        </div>
-        <h3 class="post-title">${post.title}</h3>
-        <p class="post-excerpt">${post.content.substring(0,120)}${post.content.length>120?'...':''}</p>
-        ${post.ref ? `
-        <div class="ref-bar" style="margin-top:10px">
-          <div class="ref-bar-inner">
-            <span class="ref-bar-label">📎 참고자료</span>
-            <a class="ref-bar-link" href="${post.ref}" target="_blank">외부 사이트로 이동 →</a>
+        <div class="post-summary" tabindex="0">
+          <div class="post-meta">
+            <span class="post-topic">${post.topic}</span>
+            <span class="post-date">${post.edited ? post.date + ' (수정됨 ' + post.edited + ')' : post.date}</span>
           </div>
-        </div>` : ''}
-        <div class="post-footer-row">
-          <span></span>
-          <div style="display:flex;gap:8px">
-            <button class="btn-edit-sm" onclick="requireAuth(()=>openEditPost(${realIdx}))">✎ 수정</button>
-            <button class="btn-delete-sm" onclick="requireAuth(()=>deletePost(${realIdx}))">삭제</button>
+          <div class="post-summary-row">
+            <h3 class="post-title">${post.title}</h3>
+            <span class="post-chevron">▾</span>
+          </div>
+          <p class="post-excerpt">${post.content.substring(0,100)}${post.content.length>100?'...':''}</p>
+        </div>
+        <div class="post-body" style="display:none">
+          <div class="post-body-content">${post.content.replace(/\n/g,'<br>')}</div>
+          ${post.ref ? `
+          <div class="ref-bar" style="margin-top:16px">
+            <div class="ref-bar-inner">
+              <span class="ref-bar-label">📎 참고자료</span>
+              <a class="ref-bar-link" href="${post.ref}" target="_blank">외부 사이트로 이동 →</a>
+            </div>
+          </div>` : ''}
+          <div class="post-footer-row" style="margin-top:16px">
+            <span></span>
+            <div style="display:flex;gap:8px">
+              <button class="btn-edit-sm" onclick="event.stopPropagation();requireAuth(()=>openEditPost(${realIdx}))">✎ 수정</button>
+              <button class="btn-delete-sm" onclick="event.stopPropagation();requireAuth(()=>deletePost(${realIdx}))">삭제</button>
+            </div>
           </div>
         </div>`;
-      el.addEventListener('click', e => {
-        if (e.target.tagName==='BUTTON'||e.target.tagName==='A') return;
-        openDetailPost(post);
+
+      // 클릭 시 펼치기/닫기
+      const summary = el.querySelector('.post-summary');
+      const body    = el.querySelector('.post-body');
+      const chevron = el.querySelector('.post-chevron');
+      summary.addEventListener('click', () => {
+        const isOpen = body.style.display !== 'none';
+        // 다른 열린 항목 닫기
+        list.querySelectorAll('.post-item-expandable').forEach(other => {
+          other.querySelector('.post-body').style.display = 'none';
+          other.querySelector('.post-chevron').textContent = '▾';
+          other.classList.remove('post-expanded');
+        });
+        if (!isOpen) {
+          body.style.display = 'block';
+          chevron.textContent = '▴';
+          el.classList.add('post-expanded');
+          el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
       });
       list.appendChild(el);
     });
