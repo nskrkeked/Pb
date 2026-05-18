@@ -195,3 +195,76 @@
   white-space: pre-wrap;
   padding-top: 20px;
 }
+
+/* ══ POST EXPAND ANIMATION ══ */
+.post-item-expandable .post-summary {
+  cursor: pointer;
+  user-select: none;
+}
+.post-item-expandable .post-summary:hover .post-title {
+  color: var(--accent);
+}
+.post-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.post-chevron {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.25s;
+}
+.post-item-expandable.post-expanded .post-chevron {
+  color: var(--accent);
+}
+
+/* 펼침 바디 — CSS max-height 트랜지션 */
+.post-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s ease;
+  overflow: hidden;
+}
+.post-body-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+.post-item-expandable.post-expanded .post-body {
+  grid-template-rows: 1fr;
+}
+.post-body-content {
+  font-size: 0.93rem;
+  line-height: 1.85;
+  color: var(--text-dim);
+  padding: 20px 0 4px;
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+  white-space: pre-wrap;
+}
+.post-item-expandable.post-expanded {
+  border-left-color: var(--accent);
+  background: var(--surface2);
+}
+
+/* ══ POST REF BOX in Resources ══ */
+.resource-box-refs {
+  border-left: 3px solid var(--accent2);
+}
+.res-link-post {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.res-link-post-topic {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  background: var(--accent2);
+  color: #000;
+  padding: 2px 7px;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  font-weight: 700;
+}
