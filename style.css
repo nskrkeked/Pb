@@ -469,6 +469,29 @@ footer { padding:40px 80px; }
   .topic-posts .posts-header { flex-direction:column; align-items:flex-start; gap:16px; }
   .section-head-row { flex-direction:column; align-items:flex-start; }
 }
+
+.profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-links {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .profile-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .profile-links {
+    width: 100%;
+  }
+}
 /* ══════════════════════════════════════════
    PROFILE SECTION
 ══════════════════════════════════════════ */
