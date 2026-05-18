@@ -534,58 +534,95 @@ function renderPosts() {
       const el = document.createElement('div');
       el.className = 'post-item post-item-expandable';
       el.innerHTML = `
-        <div class="post-summary" tabindex="0">
+        <div class="post-summary" tabindex="0" role="button" aria-expanded="false">
           <div class="post-meta">
             <span class="post-topic">${post.topic}</span>
-            <span class="post-date">${post.edited ? post.date + ' (수정됨 ' + post.edited + ')' : post.date}</span>
+            <span class="post-date">${post.edited ? post.date + ' · 수정됨 ' + post.edited : post.date}</span>
           </div>
           <div class="post-summary-row">
             <h3 class="post-title">${post.title}</h3>
             <span class="post-chevron">▾</span>
           </div>
-          <p class="post-excerpt">${post.content.substring(0,100)}${post.content.length>100?'...':''}</p>
+          <p class="post-excerpt">${post.content.substring(0,110)}${post.content.length>110?'…':''}</p>
         </div>
-        <div class="post-body" style="display:none">
-          <div class="post-body-content">${post.content.replace(/\n/g,'<br>')}</div>
-          ${post.ref ? `
-          <div class="ref-bar" style="margin-top:16px">
-            <div class="ref-bar-inner">
-              <span class="ref-bar-label">📎 참고자료</span>
-              <a class="ref-bar-link" href="${post.ref}" target="_blank">외부 사이트로 이동 →</a>
-            </div>
-          </div>` : ''}
-          <div class="post-footer-row" style="margin-top:16px">
-            <span></span>
-            <div style="display:flex;gap:8px">
-              <button class="btn-edit-sm" onclick="event.stopPropagation();requireAuth(()=>openEditPost(${realIdx}))">✎ 수정</button>
-              <button class="btn-delete-sm" onclick="event.stopPropagation();requireAuth(()=>deletePost(${realIdx}))">삭제</button>
+        <div class="post-body">
+          <div class="post-body-inner">
+            <div class="post-body-content">${post.content.replace(/\n/g,'<br>')}</div>
+            ${post.ref ? `
+            <div class="ref-bar" style="margin-top:20px">
+              <div class="ref-bar-inner">
+                <span class="ref-bar-label">📎 첨부 참고자료</span>
+                <a class="ref-bar-link" href="${post.ref}" target="_blank" rel="noopener">외부 사이트로 이동 →</a>
+              </div>
+            </div>` : ''}
+            <div class="post-footer-row" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border)">
+              <span></span>
+              <div style="display:flex;gap:8px">
+                <button class="btn-edit-sm" onclick="event.stopPropagation();requireAuth(()=>openEditPost(${realIdx}))">✎ 수정</button>
+                <button class="btn-delete-sm" onclick="event.stopPropagation();requireAuth(()=>deletePost(${realIdx}))">삭제</button>
+              </div>
             </div>
           </div>
         </div>`;
 
-      // 클릭 시 펼치기/닫기
       const summary = el.querySelector('.post-summary');
       const body    = el.querySelector('.post-body');
       const chevron = el.querySelector('.post-chevron');
+
       summary.addEventListener('click', () => {
-        const isOpen = body.style.display !== 'none';
+        const isOpen = el.classList.contains('post-expanded');
         // 다른 열린 항목 닫기
-        list.querySelectorAll('.post-item-expandable').forEach(other => {
-          other.querySelector('.post-body').style.display = 'none';
-          other.querySelector('.post-chevron').textContent = '▾';
-          other.classList.remove('post-expanded');
+        list.querySelectorAll('.post-item-expandable.post-expanded').forEach(other => {
+          if (other !== el) {
+            other.classList.remove('post-expanded');
+            other.querySelector('.post-chevron').textContent = '▾';
+            other.querySelector('.post-summary').setAttribute('aria-expanded','false');
+          }
         });
         if (!isOpen) {
-          body.style.display = 'block';
-          chevron.textContent = '▴';
           el.classList.add('post-expanded');
-          el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          chevron.textContent = '▴';
+          summary.setAttribute('aria-expanded','true');
+          setTimeout(() => el.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+        } else {
+          el.classList.remove('post-expanded');
+          chevron.textContent = '▾';
+          summary.setAttribute('aria-expanded','false');
         }
       });
       list.appendChild(el);
     });
   }
   document.getElementById('post-count').textContent = posts.length;
+  renderPostRefs(); // 참고자료 섹션에 포스트 ref 반영
+}
+
+// 포스트에 첨부된 참고자료를 Learning Resources 섹션에 표시
+function renderPostRefs() {
+  const existing = document.getElementById('postRefBox');
+  if (existing) existing.remove();
+
+  const postRefs = posts.filter(p => p.ref && p.ref.trim());
+  if (postRefs.length === 0) return;
+
+  const grid = document.getElementById('resourceGrid');
+  const box  = document.createElement('div');
+  box.id = 'postRefBox';
+  box.className = 'resource-box resource-box-refs';
+  box.innerHTML = `
+    <div class="resource-icon">📎</div>
+    <div class="resource-info">
+      <h3>Posts 첨부 자료</h3>
+      <p>글에 첨부된 참고자료 모음입니다.</p>
+    </div>
+    <div class="resource-links">
+      ${postRefs.map(p => `
+        <a href="${p.ref}" target="_blank" rel="noopener" class="res-link res-link-post">
+          <span class="res-link-post-topic">${p.topic}</span>
+          ${p.title} →
+        </a>`).join('')}
+    </div>`;
+  grid.appendChild(box);
 }
 
 // write modal
