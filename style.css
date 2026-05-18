@@ -147,3 +147,51 @@
   .admin-data-grid { grid-template-columns:1fr; }
   .manage-add-row { flex-direction:column; }
 }
+
+/* ══ POST EXPAND ══ */
+.post-item-expandable {
+  cursor: default;
+  padding: 0;
+  overflow: hidden;
+}
+.post-summary {
+  padding: 24px 32px 20px;
+  cursor: pointer;
+  outline: none;
+}
+.post-summary:hover .post-title { color: var(--accent); }
+.post-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.post-chevron {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  font-family: var(--mono);
+}
+.post-item.post-expanded {
+  border-left-color: var(--accent);
+  background: var(--surface2);
+}
+.post-item.post-expanded .post-chevron { color: var(--accent); }
+.post-body {
+  padding: 0 32px 24px;
+  border-top: 1px solid var(--border);
+  animation: expandIn 0.2s ease;
+}
+@keyframes expandIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.post-body-content {
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--text-dim);
+  white-space: pre-wrap;
+  padding-top: 20px;
+}
