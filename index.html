@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -120,37 +121,6 @@
 
   </main>
 </div>
-
-<!-- ═══ ABOUT ME PROFILE SECTION (맨 아래) ═══ -->
-<section class="profile-section" id="profile">
-  <div class="profile-container">
-    <div class="profile-label">// IDENTIFICATION</div>
-    <div class="profile-content">
-      <div class="profile-avatar">GM</div>
-      <div class="profile-info">
-        <div class="profile-header">
-          <h2 class="profile-name">nskrkeked <span class="profile-name-sub">/ 이름</span></h2>
-          <div class="profile-title">HARDWARE ENTHUSIAST & DEVELOPER</div>
-        </div>
-        <p class="profile-description">
-          안녕하세요! 공학을 깊이 있게 탐구하는 개발자입니다.<br>
-          반도체, FPGA, AI 하드웨어 등 다양한 분야를 학습하고 있습니다.<br>
-          e-mail: nskrkeked@gmail.com
-        </p>
-        <div class="profile-tags">
-          <span class="tag">#FPGA</span>
-          <span class="tag">#Verilog</span>
-          <span class="tag">#Architecture</span>
-          <span class="tag">#AI_Hardware</span>
-        </div>
-        <div class="profile-links">
-          <a href="https://github.com/nskrkeked" class="profile-link" target="_blank">GITHUB →</a>
-          <a href="mailto:nskrkeked@gmail.com" class="profile-link">EMAIL →</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <footer>
   <div class="footer-inner">
@@ -312,173 +282,6 @@
     </div>
   </div>
 </div>
-
-<style>
-  :root {
-    --bg-dark: #0a0a0a;
-    --bg-panel: #1a1a1a;
-    --border: #333;
-    --text-main: #fff;
-    --text-muted: #999;
-    --accent: #ffff00;
-    --accent-blue: #00bfff;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    font-family: 'Space Mono', monospace;
-  }
-
-  /* PROFILE SECTION STYLES */
-  .profile-section {
-    padding: 80px 60px;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    background-color: var(--bg-panel);
-  }
-
-  .profile-label {
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 2px;
-    margin-bottom: 30px;
-  }
-
-  .profile-container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .profile-content {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 40px;
-    align-items: start;
-  }
-
-  .profile-avatar {
-    width: 120px;
-    height: 120px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-blue));
-    border: 2px solid var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 52px;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
-  .profile-info {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .profile-header {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .profile-name {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -1px;
-  }
-
-  .profile-name-sub {
-    color: var(--accent);
-  }
-
-  .profile-title {
-    font-size: 13px;
-    color: var(--accent-blue);
-    letter-spacing: 1px;
-  }
-
-  .profile-description {
-    font-size: 14px;
-    color: var(--text-muted);
-    line-height: 1.8;
-  }
-
-  .profile-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .tag {
-    padding: 6px 12px;
-    border: 1px solid var(--border);
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
-    transition: all 0.3s;
-  }
-
-  .tag:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .profile-links {
-    display: flex;
-    gap: 15px;
-  }
-
-  .profile-link {
-    padding: 10px 16px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--accent-blue);
-    text-decoration: none;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-family: inherit;
-    letter-spacing: 0.5px;
-  }
-
-  .profile-link:hover {
-    border-color: var(--accent-blue);
-    background-color: rgba(0, 191, 255, 0.1);
-    color: var(--accent);
-  }
-
-  @media (max-width: 768px) {
-    .profile-section {
-      padding: 40px 20px;
-    }
-
-    .profile-content {
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-
-    .profile-avatar {
-      width: 100px;
-      height: 100px;
-      font-size: 44px;
-    }
-
-    .profile-name {
-      font-size: 20px;
-    }
-
-    .profile-links {
-      flex-direction: column;
-    }
-  }
-</style>
 
 <script>
 'use strict';
@@ -806,7 +609,7 @@ function renderPostRefs() {
   const grid = document.getElementById('resourceGrid');
   const box  = document.createElement('div');
   box.id = 'postRefBox';
-  box.className = 'resource-box';
+  box.className = 'resource-box resource-box-refs';
   box.innerHTML = `
     <div class="resource-icon">📎</div>
     <div class="resource-info">
@@ -959,3 +762,5 @@ renderAll();
 </script>
 </body>
 </html>
+
+```
