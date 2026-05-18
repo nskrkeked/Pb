@@ -3,761 +3,288 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Engineering Archive</title>
+  <title>Admin — Engineering Archive</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="background-grid"></div>
 <div class="scanline"></div>
 
-<!-- ═══ TOP NAV ═══ -->
+<!-- NAV -->
 <nav class="topnav">
-  <span class="nav-logo">ENG_ARCHIVE</span>
-  <div class="nav-links">
-    <button class="nav-item" onclick="requireAuth(openTopicManage)">토픽 관리</button>
-    <button class="nav-item" onclick="requireAuth(openResourceManage)">참고자료 관리</button>
-    <button class="nav-item admin-link" onclick="requireAuth(openAdminPanel)">⚙ ADMIN</button>
+  <a href="index.html" class="nav-back">← ENG_ARCHIVE</a>
+  <div class="nav-breadcrumb">
+    <span>SYSTEM</span>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">ADMIN</span>
   </div>
 </nav>
 
-<!-- ═══ HERO ═══ -->
-<header class="hero" id="top">
-  <div class="hero-left">
-    <div class="window w1"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Engineering</div>
-    <div class="window w2"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Knowledge</div>
-    <div class="window w3"><div class="title-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>Archive</div>
-  </div>
-  <div class="hero-right">
-    <div class="hero-eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-text">// KNOWLEDGE BASE SYSTEM</span></div>
-    <h1 class="hero-title">공학을<br><span class="accent">탐구하다.</span></h1>
-    <p class="hero-sub">반도체부터 AI 하드웨어까지 —<br>복잡한 공학 개념을 체계적으로 정리하고<br>깊이 있게 학습하는 아카이브입니다.</p>
-    <div class="hero-cta-row">
-      <a href="#topics" class="btn-cta">탐색 시작 →</a>
-      <a href="#posts" class="btn-cta-ghost">최신 글 보기</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat"><span id="post-count">0</span><small>POSTS</small></div>
-      <div class="stat-div"></div>
-      <div class="stat"><span id="topic-count">0</span><small>TOPICS</small></div>
-      <div class="stat-div"></div>
-      <div class="stat"><span>∞</span><small>LEARNING</small></div>
-    </div>
+<!-- ADMIN HERO -->
+<header class="topic-hero" style="padding-bottom:40px">
+  <div class="topic-hero-inner">
+    <div class="hero-label">// ADMIN PANEL</div>
+    <h1 style="color:var(--accent2);font-size:3rem;margin:12px 0 16px">Site Manager</h1>
+    <p class="topic-desc">토픽 페이지를 추가하거나 삭제하세요. 변경 사항은 메인 페이지에 즉시 반영됩니다.</p>
   </div>
 </header>
 
-<!-- ═══ ABOUT (자기소개) ═══ -->
-<section class="about-section" id="about">
-  <div class="about-inner">
-    <div class="about-left">
-      <div class="section-label">// ABOUT</div>
-      <div class="about-text" id="aboutText">
-        안녕하세요. 공학을 좋아하는 학생입니다.<br>
-        이 아카이브는 제가 배운 개념들을 정리하고 공유하는 공간입니다.
-      </div>
+<!-- STATS BAR -->
+<div class="admin-stats-bar">
+  <div class="admin-stat"><span id="topicCount">0</span> TOPICS</div>
+  <div class="admin-stat-div"></div>
+  <div class="admin-stat"><span id="postCount">0</span> POSTS</div>
+  <div class="admin-stat-div"></div>
+  <div class="admin-stat"><span id="customTopicCount">0</span> CUSTOM</div>
+</div>
+
+<!-- TOPIC MANAGER -->
+<section class="admin-section">
+  <div class="admin-section-header">
+    <div>
+      <div class="section-label">01 / TOPIC PAGES</div>
+      <h2>토픽 관리</h2>
     </div>
-    <button class="btn-edit-sm" onclick="requireAuth(openAboutEdit)">✎ 수정</button>
+    <button class="btn-write" id="openAddTopic">+ ADD TOPIC</button>
+  </div>
+
+  <!-- DEFAULT TOPICS -->
+  <div class="admin-group-label">DEFAULT TOPICS (삭제 불가)</div>
+  <div class="admin-topic-list" id="defaultTopicList"></div>
+
+  <!-- CUSTOM TOPICS -->
+  <div class="admin-group-label" style="margin-top:32px">CUSTOM TOPICS</div>
+  <div class="admin-topic-list" id="customTopicList">
+    <div class="empty-state" id="customEmpty" style="padding:40px">
+      <span class="empty-icon">[ ]</span>
+      <p>아직 추가된 커스텀 토픽이 없습니다.</p>
+    </div>
   </div>
 </section>
 
-<!-- ═══ MAIN LAYOUT ═══ -->
-<div class="page-layout">
+<!-- DATA MANAGEMENT -->
+<section class="admin-section" style="border-top:1px solid var(--border)">
+  <div class="section-label">02 / DATA</div>
+  <h2>데이터 관리</h2>
+  <div class="admin-data-grid">
+    <div class="admin-data-card">
+      <div class="admin-data-icon">📦</div>
+      <h3>Export</h3>
+      <p>모든 글과 설정을 JSON 파일로 내보내기</p>
+      <button class="btn-write" style="width:100%;margin-top:16px" onclick="exportData()">EXPORT JSON</button>
+    </div>
+    <div class="admin-data-card">
+      <div class="admin-data-icon">🗑</div>
+      <h3>Reset Posts</h3>
+      <p>작성된 모든 글을 삭제합니다. 되돌릴 수 없습니다.</p>
+      <button class="btn-danger" style="width:100%;margin-top:16px" onclick="resetPosts()">RESET ALL POSTS</button>
+    </div>
+    <div class="admin-data-card">
+      <div class="admin-data-icon">⚙️</div>
+      <h3>Reset Topics</h3>
+      <p>커스텀 토픽을 모두 삭제하고 기본값으로 초기화합니다.</p>
+      <button class="btn-danger" style="width:100%;margin-top:16px" onclick="resetTopics()">RESET TOPICS</button>
+    </div>
+  </div>
+</section>
 
-  <!-- LEFT TOC -->
-  <aside class="toc" id="toc">
-    <div class="toc-label">// 목차</div>
-    <nav class="toc-nav">
-      <a href="#topics" class="toc-link" data-section="topics"><span class="toc-num">01</span><span class="toc-text">Main Topics</span></a>
-      <a href="#posts"  class="toc-link" data-section="posts"><span class="toc-num">02</span><span class="toc-text">Archive Posts</span></a>
-      <a href="#resources" class="toc-link" data-section="resources"><span class="toc-num">03</span><span class="toc-text">Learning Resources</span></a>
-    </nav>
-    <div class="toc-progress"><div class="toc-progress-bar" id="tocProgress"></div></div>
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <main class="main-content">
-
-    <!-- ── 01 TOPICS ── -->
-    <section class="section" id="topics">
-      <div class="section-head">
-        <div class="section-label">01 / MAIN TOPICS</div>
-        <div class="section-head-row">
-          <div><h2>Main Topics</h2><p class="section-desc">토픽을 선택하면 관련 글과 자료를 모아볼 수 있습니다.</p></div>
-          <button class="btn-write" onclick="requireAuth(openTopicManage)">+ 토픽 추가</button>
-        </div>
+<!-- ADD TOPIC MODAL -->
+<div class="modal-overlay" id="addTopicOverlay">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <span class="modal-title">// ADD TOPIC</span>
+      <button class="modal-close" id="closeAddTopic">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>TOPIC NAME (영문 권장)</label>
+        <input type="text" id="newTopicName" placeholder="예: Optics, Thermodynamics..." />
       </div>
-      <div class="cards" id="topicCards"></div>
-    </section>
-
-    <!-- ── 02 POSTS ── -->
-    <section class="section" id="posts">
-      <div class="section-head">
-        <div class="section-label">02 / POSTS</div>
-        <div class="section-head-row">
-          <div><h2>Archive Posts</h2><p class="section-desc">작성된 모든 글을 최신순으로 볼 수 있습니다.</p></div>
-          <button class="btn-write" id="openModal">+ NEW POST</button>
-        </div>
+      <div class="form-group">
+        <label>DESCRIPTION</label>
+        <input type="text" id="newTopicDesc" placeholder="한 줄 설명" />
       </div>
-      <div class="posts-list" id="postsList">
-        <div class="empty-state" id="emptyState">
-          <span class="empty-icon">[ ]</span>
-          <p>아직 작성된 글이 없습니다.<br>첫 번째 글을 작성해보세요.</p>
-        </div>
+      <div class="form-group">
+        <label>EMOJI ICON (선택)</label>
+        <input type="text" id="newTopicIcon" placeholder="예: ⚡ 🔬 🧲" maxlength="2" />
       </div>
-    </section>
-
-    <!-- ── 03 RESOURCES ── -->
-    <section class="section" id="resources">
-      <div class="section-head">
-        <div class="section-label">03 / LEARNING RESOURCES</div>
-        <div class="section-head-row">
-          <div><h2>Learning Resources</h2><p class="section-desc">학습에 도움이 되는 영상, 논문, 아티클 모음입니다.</p></div>
-          <button class="btn-write" onclick="requireAuth(openResourceManage)">+ 자료 추가</button>
-        </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelAddTopic">CANCEL</button>
+        <button class="btn-submit" id="submitAddTopic">CREATE →</button>
       </div>
-      <div class="resource-grid" id="resourceGrid"></div>
-    </section>
-
-  </main>
+    </div>
+  </div>
 </div>
 
 <footer>
   <div class="footer-inner">
     <span class="footer-logo">ENG_ARCHIVE</span>
-    <span class="footer-copy">// 공학 지식은 세상을 움직이는 언어입니다.</span>
+    <span class="footer-copy">// Admin Panel</span>
   </div>
 </footer>
 
-<!-- ════════════════════════════════════════
-     MODALS
-════════════════════════════════════════ -->
-
-<!-- 🔐 AUTH MODAL -->
-<div class="modal-overlay" id="authOverlay">
-  <div class="modal modal-sm">
-    <div class="modal-header"><span class="modal-title">// 관리자 인증</span><button class="modal-close" onclick="closeModal('authOverlay')">✕</button></div>
-    <div class="modal-body">
-      <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:16px">이 기능은 관리자만 사용할 수 있습니다.</p>
-      <div class="form-group"><label>PASSWORD</label><input type="password" id="authInput" placeholder="비밀번호 입력" /></div>
-      <div class="auth-hint" id="authHint"></div>
-      <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeModal('authOverlay')">CANCEL</button>
-        <button class="btn-submit" onclick="submitAuth()">CONFIRM →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ✍️ POST WRITE / EDIT MODAL -->
-<div class="modal-overlay" id="postModal">
-  <div class="modal">
-    <div class="modal-header"><span class="modal-title" id="postModalTitle">// NEW POST</span><button class="modal-close" onclick="closePostModal()">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group"><label>TITLE</label><input type="text" id="postTitle" placeholder="글 제목을 입력하세요" /></div>
-      <div class="form-group"><label>TOPIC</label><select id="postTopic"></select></div>
-      <div class="form-group"><label>CONTENT</label><textarea id="postContent" placeholder="내용을 작성하세요..."></textarea></div>
-      <div class="form-group">
-        <label>REFERENCE URL (선택)</label>
-        <input type="text" id="postRef" placeholder="https://..." />
-      </div>
-      <!-- 참고자료 바 -->
-      <div class="ref-bar" id="refBar" style="display:none">
-        <div class="ref-bar-inner">
-          <span class="ref-bar-label">📎 참고자료</span>
-          <a class="ref-bar-link" id="refBarLink" href="#" target="_blank">링크 열기 →</a>
-        </div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-cancel" onclick="closePostModal()">CANCEL</button>
-        <button class="btn-submit" id="submitPost">PUBLISH →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 📖 POST DETAIL MODAL -->
-<div class="modal-overlay" id="detailModal">
-  <div class="modal modal-detail">
-    <div class="modal-header">
-      <span class="modal-title" id="detailTopic">—</span>
-      <div style="display:flex;gap:10px;align-items:center">
-        <button class="btn-edit-sm" id="detailEditBtn">✎ 수정</button>
-        <button class="modal-close" onclick="closeModal('detailModal')">✕</button>
-      </div>
-    </div>
-    <div class="modal-body">
-      <div class="detail-date" id="detailDate"></div>
-      <h2 class="detail-title" id="detailTitle"></h2>
-      <div class="detail-content" id="detailContent"></div>
-      <!-- 참고자료 바 -->
-      <div class="ref-bar" id="detailRefBar" style="display:none">
-        <div class="ref-bar-inner">
-          <span class="ref-bar-label">📎 참고자료</span>
-          <a class="ref-bar-link" id="detailRefLink" href="#" target="_blank">외부 사이트로 이동 →</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 🗂 TOPIC MANAGE MODAL -->
-<div class="modal-overlay" id="topicModal">
-  <div class="modal modal-wide">
-    <div class="modal-header"><span class="modal-title">// 토픽 관리</span><button class="modal-close" onclick="closeModal('topicModal')">✕</button></div>
-    <div class="modal-body">
-      <!-- 추가 폼 -->
-      <div class="manage-add-row">
-        <input type="text" id="newTopicName" placeholder="토픽 이름 (예: Optics)" class="manage-input" />
-        <input type="text" id="newTopicDesc" placeholder="한 줄 설명" class="manage-input" />
-        <input type="text" id="newTopicIcon" placeholder="이모지 🔬" class="manage-input icon-input" maxlength="2" />
-        <button class="btn-submit" onclick="addTopic()">ADD →</button>
-      </div>
-      <!-- 리스트 -->
-      <div class="manage-list" id="topicManageList"></div>
-    </div>
-  </div>
-</div>
-
-<!-- 📚 RESOURCE MANAGE MODAL -->
-<div class="modal-overlay" id="resourceModal">
-  <div class="modal modal-wide">
-    <div class="modal-header"><span class="modal-title">// 참고자료 관리</span><button class="modal-close" onclick="closeModal('resourceModal')">✕</button></div>
-    <div class="modal-body">
-      <!-- 추가 폼 -->
-      <div class="manage-add-row">
-        <select id="newResType" class="manage-input" style="max-width:130px">
-          <option value="video">📺 Video</option>
-          <option value="paper">📄 Paper</option>
-        </select>
-        <input type="text" id="newResLabel" placeholder="자료 이름" class="manage-input" />
-        <input type="text" id="newResUrl"   placeholder="https://..." class="manage-input" />
-        <button class="btn-submit" onclick="addResource()">ADD →</button>
-      </div>
-      <!-- 리스트 -->
-      <div class="manage-list" id="resourceManageList"></div>
-    </div>
-  </div>
-</div>
-
-<!-- 👤 ABOUT EDIT MODAL -->
-<div class="modal-overlay" id="aboutModal">
-  <div class="modal modal-sm">
-    <div class="modal-header"><span class="modal-title">// 자기소개 수정</span><button class="modal-close" onclick="closeModal('aboutModal')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group"><label>소개글</label><textarea id="aboutEdit" rows="5" placeholder="자기소개를 입력하세요..."></textarea></div>
-      <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeModal('aboutModal')">CANCEL</button>
-        <button class="btn-submit" onclick="saveAbout()">SAVE →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ⚙️ ADMIN PANEL MODAL -->
-<div class="modal-overlay" id="adminModal">
-  <div class="modal modal-sm">
-    <div class="modal-header"><span class="modal-title">// ADMIN PANEL</span><button class="modal-close" onclick="closeModal('adminModal')">✕</button></div>
-    <div class="modal-body">
-      <div class="admin-data-grid">
-        <div class="admin-data-card">
-          <div class="admin-data-icon">🔑</div>
-          <h3>비밀번호 변경</h3>
-          <input type="password" id="newPwInput" placeholder="새 비밀번호" class="manage-input" style="margin:10px 0 6px;width:100%" />
-          <button class="btn-submit" style="width:100%" onclick="changePassword()">변경 →</button>
-        </div>
-        <div class="admin-data-card">
-          <div class="admin-data-icon">📦</div>
-          <h3>데이터 Export</h3>
-          <p>모든 글·설정을 JSON으로 내보내기</p>
-          <button class="btn-write" style="width:100%;margin-top:10px" onclick="exportData()">EXPORT</button>
-        </div>
-        <div class="admin-data-card">
-          <div class="admin-data-icon">🗑</div>
-          <h3>전체 초기화</h3>
-          <p>모든 글과 커스텀 데이터를 삭제합니다.</p>
-          <button class="btn-danger" style="width:100%;margin-top:10px" onclick="resetAll()">RESET</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
-'use strict';
+  const DEFAULT_TOPICS = [
+    { name: 'Semiconductors', desc: '반도체 구조, 역할, 발전 과정', icon: '💾', default: true },
+    { name: 'Circuits',       desc: '회로의 원리와 응용',           icon: '⚡', default: true },
+    { name: 'AI Hardware',    desc: 'AI 시대의 연산 구조',          icon: '🤖', default: true },
+    { name: 'Materials',      desc: '신소재와 공학 기술',           icon: '🔬', default: true },
+  ];
 
-// ══════════════════════════════════════════
-// DATA HELPERS
-// ══════════════════════════════════════════
-const DEFAULT_TOPICS = [
-  { name:'Semiconductors', desc:'반도체 구조, 역할, 발전 과정', icon:'💾' },
-  { name:'Circuits',       desc:'회로의 원리와 응용',           icon:'⚡' },
-  { name:'AI Hardware',    desc:'AI 시대의 연산 구조',          icon:'🤖' },
-  { name:'Materials',      desc:'신소재와 공학 기술',           icon:'🔬' },
-];
-const DEFAULT_RESOURCES = [
-  { type:'video', label:'3Blue1Brown',     url:'https://www.youtube.com/@3blue1brown' },
-  { type:'video', label:'Ben Eater',       url:'https://www.youtube.com/@BenEater' },
-  { type:'video', label:'Two Minute Papers',url:'https://www.youtube.com/c/TwoMinutePapers' },
-  { type:'paper', label:'arXiv CS.AR',     url:'https://arxiv.org/list/cs.AR/recent' },
-  { type:'paper', label:'IEEE Xplore',     url:'https://ieeexplore.ieee.org/' },
-  { type:'paper', label:'Google Scholar',  url:'https://scholar.google.com/' },
-];
+  // localStorage에서 커스텀 토픽 읽기
+  let customTopics = JSON.parse(localStorage.getItem('eng_custom_topics') || '[]');
+  let posts = JSON.parse(localStorage.getItem('eng_posts') || '[]');
 
-const get  = k       => JSON.parse(localStorage.getItem(k) || 'null');
-const set  = (k, v)  => localStorage.setItem(k, JSON.stringify(v));
-
-function allTopics()    { return [...DEFAULT_TOPICS,    ...(get('eng_custom_topics')    || [])] }
-function allResources() { return [...DEFAULT_RESOURCES, ...(get('eng_custom_resources') || [])] }
-
-let posts = get('eng_posts') || [];
-
-// ══════════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════════
-const DEFAULT_PW = '1234';
-let pendingAction = null;
-let authed = false;
-
-function requireAuth(fn) {
-  if (authed) { fn(); return; }
-  pendingAction = fn;
-  document.getElementById('authInput').value = '';
-  document.getElementById('authHint').textContent = '';
-  openOverlay('authOverlay');
-}
-function submitAuth() {
-  const pw = get('eng_password') || DEFAULT_PW;
-  if (document.getElementById('authInput').value === pw) {
-    authed = true;
-    closeModal('authOverlay');
-    if (pendingAction) { pendingAction(); pendingAction = null; }
-  } else {
-    document.getElementById('authHint').textContent = '❌ 비밀번호가 틀렸습니다.';
+  function saveCustomTopics() {
+    localStorage.setItem('eng_custom_topics', JSON.stringify(customTopics));
   }
-}
-document.getElementById('authInput').addEventListener('keydown', e => { if (e.key==='Enter') submitAuth(); });
-function changePassword() {
-  const v = document.getElementById('newPwInput').value.trim();
-  if (!v) { alert('새 비밀번호를 입력하세요.'); return; }
-  set('eng_password', v);
-  alert('비밀번호가 변경되었습니다.');
-  document.getElementById('newPwInput').value = '';
-}
 
-// ══════════════════════════════════════════
-// MODAL HELPERS
-// ══════════════════════════════════════════
-function openOverlay(id)  { document.getElementById(id).classList.add('active'); }
-function closeModal(id)   { document.getElementById(id).classList.remove('active'); }
-
-// close on backdrop click
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('active'); });
-});
-
-// ══════════════════════════════════════════
-// ABOUT
-// ══════════════════════════════════════════
-function renderAbout() {
-  const txt = get('eng_about') || '안녕하세요. 공학을 좋아하는 학생입니다.<br>이 아카이브는 제가 배운 개념들을 정리하고 공유하는 공간입니다.';
-  document.getElementById('aboutText').innerHTML = txt;
-}
-function openAboutEdit() {
-  document.getElementById('aboutEdit').value = (get('eng_about') || '').replace(/<br>/g,'\n');
-  openOverlay('aboutModal');
-}
-function saveAbout() {
-  const v = document.getElementById('aboutEdit').value.trim().replace(/\n/g,'<br>');
-  set('eng_about', v);
-  renderAbout();
-  closeModal('aboutModal');
-}
-
-// ══════════════════════════════════════════
-// TOPICS
-// ══════════════════════════════════════════
-function renderTopicCards() {
-  const topics = allTopics();
-  const container = document.getElementById('topicCards');
-  container.innerHTML = '';
-  topics.forEach((t, i) => {
-    const a = document.createElement('a');
-    a.className = 'card card-link';
-    a.href = `topic.html?topic=${encodeURIComponent(t.name)}`;
-    a.innerHTML = `
-      <div class="card-num">${String(i+1).padStart(2,'0')}</div>
-      <div class="card-icon-sm">${t.icon||'📁'}</div>
-      <h3>${t.name}</h3>
-      <p>${t.desc}</p>
-      <div class="card-arrow">→</div>
-      <div class="card-line"></div>`;
-    container.appendChild(a);
-  });
-  document.getElementById('topic-count').textContent = topics.length;
-  // sync post modal select
-  const sel = document.getElementById('postTopic');
-  sel.innerHTML = '';
-  topics.forEach(t => { const o=document.createElement('option'); o.value=t.name; o.textContent=t.name; sel.appendChild(o); });
-}
-
-function openTopicManage() {
-  renderTopicManageList();
-  openOverlay('topicModal');
-}
-function renderTopicManageList() {
-  const custom = get('eng_custom_topics') || [];
-  const list = document.getElementById('topicManageList');
-  list.innerHTML = '';
-  // defaults (read-only)
-  DEFAULT_TOPICS.forEach(t => {
-    const row = document.createElement('div');
-    row.className = 'manage-row';
-    row.innerHTML = `<span class="manage-icon">${t.icon}</span><span class="manage-name">${t.name}</span><span class="manage-desc">${t.desc}</span><span class="manage-badge">기본</span>`;
-    list.appendChild(row);
-  });
-  // custom (deletable)
-  custom.forEach((t, i) => {
-    const row = document.createElement('div');
-    row.className = 'manage-row';
-    row.innerHTML = `<span class="manage-icon">${t.icon||'📁'}</span><span class="manage-name">${t.name}</span><span class="manage-desc">${t.desc}</span><button class="btn-delete-sm" onclick="deleteTopic(${i})">삭제</button>`;
-    list.appendChild(row);
-  });
-  if (custom.length === 0) {
-    const empty = document.createElement('div');
-    empty.className = 'manage-empty';
-    empty.textContent = '추가된 커스텀 토픽이 없습니다.';
-    list.appendChild(empty);
+  function allTopics() {
+    return [...DEFAULT_TOPICS, ...customTopics];
   }
-}
-function addTopic() {
-  const name = document.getElementById('newTopicName').value.trim();
-  const desc = document.getElementById('newTopicDesc').value.trim();
-  const icon = document.getElementById('newTopicIcon').value.trim() || '📁';
-  if (!name) { alert('토픽 이름을 입력하세요.'); return; }
-  if (allTopics().some(t => t.name.toLowerCase()===name.toLowerCase())) { alert('이미 존재하는 이름입니다.'); return; }
-  const custom = get('eng_custom_topics') || [];
-  custom.push({ name, desc: desc||'—', icon });
-  set('eng_custom_topics', custom);
-  ['newTopicName','newTopicDesc','newTopicIcon'].forEach(id => document.getElementById(id).value='');
-  renderTopicManageList();
-  renderTopicCards();
-}
-function deleteTopic(idx) {
-  if (!confirm('이 토픽을 삭제할까요?')) return;
-  const custom = get('eng_custom_topics') || [];
-  custom.splice(idx, 1);
-  set('eng_custom_topics', custom);
-  renderTopicManageList();
-  renderTopicCards();
-}
 
-// ══════════════════════════════════════════
-// RESOURCES
-// ══════════════════════════════════════════
-function renderResources() {
-  const resources = allResources();
-  const grid = document.getElementById('resourceGrid');
-  grid.innerHTML = '';
-  ['video','paper'].forEach(type => {
-    const links = resources.filter(r => r.type===type);
-    const meta  = type==='video' ? {icon:'📺',title:'Video Learning',desc:'추천 유튜브 강의 및 시각 자료'}
-                                 : {icon:'📄',title:'Papers & Articles',desc:'심화 학습 논문 및 아티클'};
-    const box = document.createElement('div');
-    box.className = 'resource-box';
-    box.innerHTML = `
-      <div class="resource-icon">${meta.icon}</div>
-      <div class="resource-info"><h3>${meta.title}</h3><p>${meta.desc}</p></div>
-      <div class="resource-links">
-        ${links.map(l=>`<a href="${l.url}" target="_blank" class="res-link">${l.label} →</a>`).join('')}
-        ${links.length===0?'<span class="res-empty">자료가 없습니다.</span>':''}
-      </div>`;
-    grid.appendChild(box);
-  });
-}
-function openResourceManage() {
-  renderResourceManageList();
-  openOverlay('resourceModal');
-}
-function renderResourceManageList() {
-  const custom = get('eng_custom_resources') || [];
-  const list = document.getElementById('resourceManageList');
-  list.innerHTML = '';
-  DEFAULT_RESOURCES.forEach(r => {
-    const row = document.createElement('div');
-    row.className = 'manage-row';
-    row.innerHTML = `<span class="manage-icon">${r.type==='video'?'📺':'📄'}</span><span class="manage-name">${r.label}</span><a href="${r.url}" target="_blank" class="manage-url">${r.url}</a><span class="manage-badge">기본</span>`;
-    list.appendChild(row);
-  });
-  custom.forEach((r, i) => {
-    const row = document.createElement('div');
-    row.className = 'manage-row';
-    row.innerHTML = `<span class="manage-icon">${r.type==='video'?'📺':'📄'}</span><span class="manage-name">${r.label}</span><a href="${r.url}" target="_blank" class="manage-url">${r.url}</a><button class="btn-delete-sm" onclick="deleteResource(${i})">삭제</button>`;
-    list.appendChild(row);
-  });
-}
-function addResource() {
-  const type  = document.getElementById('newResType').value;
-  const label = document.getElementById('newResLabel').value.trim();
-  const url   = document.getElementById('newResUrl').value.trim();
-  if (!label||!url) { alert('이름과 URL을 입력하세요.'); return; }
-  const custom = get('eng_custom_resources') || [];
-  custom.push({ type, label, url });
-  set('eng_custom_resources', custom);
-  document.getElementById('newResLabel').value = '';
-  document.getElementById('newResUrl').value   = '';
-  renderResourceManageList();
-  renderResources();
-}
-function deleteResource(idx) {
-  if (!confirm('이 자료를 삭제할까요?')) return;
-  const custom = get('eng_custom_resources') || [];
-  custom.splice(idx,1);
-  set('eng_custom_resources', custom);
-  renderResourceManageList();
-  renderResources();
-}
+  function postCountForTopic(name) {
+    return posts.filter(p => p.topic === name).length;
+  }
 
-// ══════════════════════════════════════════
-// POSTS
-// ══════════════════════════════════════════
-let editingIdx = null;
+  function updateStats() {
+    document.getElementById('topicCount').textContent = allTopics().length;
+    document.getElementById('postCount').textContent = posts.length;
+    document.getElementById('customTopicCount').textContent = customTopics.length;
+  }
 
-function renderPosts() {
-  const list  = document.getElementById('postsList');
-  const empty = document.getElementById('emptyState');
-  list.querySelectorAll('.post-item').forEach(e=>e.remove());
-  if (posts.length===0) { empty.style.display='flex'; }
-  else {
-    empty.style.display='none';
-    posts.slice().reverse().forEach((post, ri) => {
-      const realIdx = posts.length-1-ri;
+  function renderDefaultTopics() {
+    const list = document.getElementById('defaultTopicList');
+    list.innerHTML = '';
+    DEFAULT_TOPICS.forEach(t => {
       const el = document.createElement('div');
-      el.className = 'post-item post-item-expandable';
+      el.className = 'admin-topic-item';
       el.innerHTML = `
-        <div class="post-summary" tabindex="0" role="button" aria-expanded="false">
-          <div class="post-meta">
-            <span class="post-topic">${post.topic}</span>
-            <span class="post-date">${post.edited ? post.date + ' · 수정됨 ' + post.edited : post.date}</span>
-          </div>
-          <div class="post-summary-row">
-            <h3 class="post-title">${post.title}</h3>
-            <span class="post-chevron">▾</span>
-          </div>
-          <p class="post-excerpt">${post.content.substring(0,110)}${post.content.length>110?'…':''}</p>
+        <div class="admin-topic-icon">${t.icon}</div>
+        <div class="admin-topic-info">
+          <strong>${t.name}</strong>
+          <span>${t.desc}</span>
         </div>
-        <div class="post-body">
-          <div class="post-body-inner">
-            <div class="post-body-content">${post.content.replace(/\n/g,'<br>')}</div>
-            ${post.ref ? `
-            <div class="ref-bar" style="margin-top:20px">
-              <div class="ref-bar-inner">
-                <span class="ref-bar-label">📎 첨부 참고자료</span>
-                <a class="ref-bar-link" href="${post.ref}" target="_blank" rel="noopener">외부 사이트로 이동 →</a>
-              </div>
-            </div>` : ''}
-            <div class="post-footer-row" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border)">
-              <span></span>
-              <div style="display:flex;gap:8px">
-                <button class="btn-edit-sm" onclick="event.stopPropagation();requireAuth(()=>openEditPost(${realIdx}))">✎ 수정</button>
-                <button class="btn-delete-sm" onclick="event.stopPropagation();requireAuth(()=>deletePost(${realIdx}))">삭제</button>
-              </div>
-            </div>
-          </div>
-        </div>`;
-
-      const summary = el.querySelector('.post-summary');
-      const body    = el.querySelector('.post-body');
-      const chevron = el.querySelector('.post-chevron');
-
-      summary.addEventListener('click', () => {
-        const isOpen = el.classList.contains('post-expanded');
-        // 다른 열린 항목 닫기
-        list.querySelectorAll('.post-item-expandable.post-expanded').forEach(other => {
-          if (other !== el) {
-            other.classList.remove('post-expanded');
-            other.querySelector('.post-chevron').textContent = '▾';
-            other.querySelector('.post-summary').setAttribute('aria-expanded','false');
-          }
-        });
-        if (!isOpen) {
-          el.classList.add('post-expanded');
-          chevron.textContent = '▴';
-          summary.setAttribute('aria-expanded','true');
-          setTimeout(() => el.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
-        } else {
-          el.classList.remove('post-expanded');
-          chevron.textContent = '▾';
-          summary.setAttribute('aria-expanded','false');
-        }
-      });
+        <div class="admin-topic-meta">
+          <span class="admin-badge">${postCountForTopic(t.name)} posts</span>
+          <a href="topic.html?topic=${encodeURIComponent(t.name)}" class="admin-view-btn">VIEW →</a>
+        </div>
+      `;
       list.appendChild(el);
     });
   }
-  document.getElementById('post-count').textContent = posts.length;
-  renderPostRefs(); // 참고자료 섹션에 포스트 ref 반영
-}
 
-// 포스트에 첨부된 참고자료를 Learning Resources 섹션에 표시
-function renderPostRefs() {
-  const existing = document.getElementById('postRefBox');
-  if (existing) existing.remove();
+  function renderCustomTopics() {
+    const list = document.getElementById('customTopicList');
+    const empty = document.getElementById('customEmpty');
+    list.querySelectorAll('.admin-topic-item').forEach(e => e.remove());
 
-  const postRefs = posts.filter(p => p.ref && p.ref.trim());
-  if (postRefs.length === 0) return;
-
-  const grid = document.getElementById('resourceGrid');
-  const box  = document.createElement('div');
-  box.id = 'postRefBox';
-  box.className = 'resource-box resource-box-refs';
-  box.innerHTML = `
-    <div class="resource-icon">📎</div>
-    <div class="resource-info">
-      <h3>Posts 첨부 자료</h3>
-      <p>글에 첨부된 참고자료 모음입니다.</p>
-    </div>
-    <div class="resource-links">
-      ${postRefs.map(p => `
-        <a href="${p.ref}" target="_blank" rel="noopener" class="res-link res-link-post">
-          <span class="res-link-post-topic">${p.topic}</span>
-          ${p.title} →
-        </a>`).join('')}
-    </div>`;
-  grid.appendChild(box);
-}
-
-// write modal
-document.getElementById('openModal').addEventListener('click', () => {
-  editingIdx = null;
-  document.getElementById('postModalTitle').textContent = '// NEW POST';
-  document.getElementById('submitPost').textContent = 'PUBLISH →';
-  ['postTitle','postContent','postRef'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('refBar').style.display='none';
-  openOverlay('postModal');
-});
-function closePostModal() {
-  closeModal('postModal');
-  editingIdx=null;
-}
-
-// ref bar preview
-document.getElementById('postRef').addEventListener('input', function() {
-  const v = this.value.trim();
-  const bar = document.getElementById('refBar');
-  if (v) { bar.style.display='block'; document.getElementById('refBarLink').href=v; }
-  else   { bar.style.display='none'; }
-});
-
-document.getElementById('submitPost').addEventListener('click', () => {
-  const title   = document.getElementById('postTitle').value.trim();
-  const topic   = document.getElementById('postTopic').value;
-  const content = document.getElementById('postContent').value.trim();
-  const ref     = document.getElementById('postRef').value.trim();
-  if (!title||!content) { alert('제목과 내용을 입력해주세요.'); return; }
-  const now  = new Date();
-  const date = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
-  if (editingIdx !== null) {
-    posts[editingIdx] = { ...posts[editingIdx], title, topic, content, ref, edited: date };
-  } else {
-    posts.push({ title, topic, content, ref, date });
+    if (customTopics.length === 0) {
+      empty.style.display = 'flex';
+    } else {
+      empty.style.display = 'none';
+      customTopics.forEach((t, i) => {
+        const el = document.createElement('div');
+        el.className = 'admin-topic-item';
+        el.innerHTML = `
+          <div class="admin-topic-icon">${t.icon || '📁'}</div>
+          <div class="admin-topic-info">
+            <strong>${t.name}</strong>
+            <span>${t.desc}</span>
+          </div>
+          <div class="admin-topic-meta">
+            <span class="admin-badge">${postCountForTopic(t.name)} posts</span>
+            <a href="topic.html?topic=${encodeURIComponent(t.name)}" class="admin-view-btn">VIEW →</a>
+            <button class="btn-delete" onclick="deleteTopic(${i})">삭제</button>
+          </div>
+        `;
+        list.appendChild(el);
+      });
+    }
+    updateStats();
   }
-  set('eng_posts', posts);
-  renderPosts();
-  closePostModal();
-});
 
-function openEditPost(idx) {
-  editingIdx = idx;
-  const p = posts[idx];
-  document.getElementById('postModalTitle').textContent = '// EDIT POST';
-  document.getElementById('submitPost').textContent = 'SAVE →';
-  document.getElementById('postTitle').value   = p.title;
-  document.getElementById('postTopic').value   = p.topic;
-  document.getElementById('postContent').value = p.content;
-  document.getElementById('postRef').value     = p.ref || '';
-  const bar = document.getElementById('refBar');
-  if (p.ref) { bar.style.display='block'; document.getElementById('refBarLink').href=p.ref; }
-  else bar.style.display='none';
-  openOverlay('postModal');
-}
+  function deleteTopic(idx) {
+    const t = customTopics[idx];
+    const cnt = postCountForTopic(t.name);
+    const msg = cnt > 0
+      ? `"${t.name}" 토픽을 삭제할까요?\n이 토픽의 글 ${cnt}개도 함께 삭제됩니다.`
+      : `"${t.name}" 토픽을 삭제할까요?`;
+    if (confirm(msg)) {
+      if (cnt > 0) {
+        posts = posts.filter(p => p.topic !== t.name);
+        localStorage.setItem('eng_posts', JSON.stringify(posts));
+      }
+      customTopics.splice(idx, 1);
+      saveCustomTopics();
+      renderCustomTopics();
+    }
+  }
 
-function deletePost(idx) {
-  if (!confirm('이 글을 삭제할까요?')) return;
-  posts.splice(idx,1);
-  set('eng_posts', posts);
-  renderPosts();
-}
+  // ── ADD TOPIC MODAL ──
+  const addTopicOverlay = document.getElementById('addTopicOverlay');
+  document.getElementById('openAddTopic').addEventListener('click', () => addTopicOverlay.classList.add('active'));
+  document.getElementById('closeAddTopic').addEventListener('click', closeAddModal);
+  document.getElementById('cancelAddTopic').addEventListener('click', closeAddModal);
+  addTopicOverlay.addEventListener('click', e => { if (e.target === addTopicOverlay) closeAddModal(); });
 
-function openDetailPost(post) {
-  document.getElementById('detailTopic').textContent = `// ${post.topic}`;
-  document.getElementById('detailDate').textContent  = post.edited ? `${post.date}  (수정됨 ${post.edited})` : post.date;
-  document.getElementById('detailTitle').textContent = post.title;
-  document.getElementById('detailContent').textContent = post.content;
-  const refBar  = document.getElementById('detailRefBar');
-  const refLink = document.getElementById('detailRefLink');
-  if (post.ref) { refBar.style.display='block'; refLink.href=post.ref; }
-  else refBar.style.display='none';
-  // edit button
-  const editBtn = document.getElementById('detailEditBtn');
-  const realIdx = posts.indexOf(post);
-  editBtn.onclick = () => requireAuth(() => { closeModal('detailModal'); openEditPost(realIdx); });
-  openOverlay('detailModal');
-}
+  function closeAddModal() {
+    addTopicOverlay.classList.remove('active');
+    document.getElementById('newTopicName').value = '';
+    document.getElementById('newTopicDesc').value = '';
+    document.getElementById('newTopicIcon').value = '';
+  }
 
-// ══════════════════════════════════════════
-// ADMIN PANEL
-// ══════════════════════════════════════════
-function openAdminPanel() { openOverlay('adminModal'); }
-function exportData() {
-  const data = { topics: allTopics(), posts, resources: allResources(), about: get('eng_about'), exportedAt: new Date().toISOString() };
-  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a'); a.href=url; a.download='eng_archive_backup.json'; a.click();
-  URL.revokeObjectURL(url);
-}
-function resetAll() {
-  if (!confirm('모든 데이터를 초기화할까요? 되돌릴 수 없습니다.')) return;
-  ['eng_posts','eng_custom_topics','eng_custom_resources','eng_about'].forEach(k=>localStorage.removeItem(k));
-  posts=[];
-  renderAll();
-  closeModal('adminModal');
-}
-
-// ══════════════════════════════════════════
-// TOC
-// ══════════════════════════════════════════
-function updateToc() {
-  const scrollY = window.scrollY;
-  const docH    = document.documentElement.scrollHeight - window.innerHeight;
-  document.getElementById('tocProgress').style.height = `${(scrollY/Math.max(docH,1))*100}%`;
-  let current = '';
-  ['topics','posts','resources'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el && el.getBoundingClientRect().top <= 140) current = id;
+  document.getElementById('submitAddTopic').addEventListener('click', () => {
+    const name = document.getElementById('newTopicName').value.trim();
+    const desc = document.getElementById('newTopicDesc').value.trim();
+    const icon = document.getElementById('newTopicIcon').value.trim() || '📁';
+    if (!name) { alert('토픽 이름을 입력해주세요.'); return; }
+    const exists = allTopics().some(t => t.name.toLowerCase() === name.toLowerCase());
+    if (exists) { alert('이미 존재하는 토픽 이름입니다.'); return; }
+    customTopics.push({ name, desc: desc || '—', icon });
+    saveCustomTopics();
+    renderCustomTopics();
+    closeAddModal();
   });
-  document.querySelectorAll('.toc-link').forEach(a => a.classList.toggle('active', a.dataset.section===current));
-  const hero = document.getElementById('top');
-  document.getElementById('toc').classList.toggle('toc-visible', scrollY > (hero?.offsetHeight||600) - 100);
-}
-window.addEventListener('scroll', updateToc, { passive:true });
 
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) { e.preventDefault(); target.scrollIntoView({ behavior:'smooth', block:'start' }); }
-  });
-});
+  // ── DATA MANAGEMENT ──
+  function exportData() {
+    const data = {
+      topics: allTopics(),
+      posts: JSON.parse(localStorage.getItem('eng_posts') || '[]'),
+      links: JSON.parse(localStorage.getItem('eng_links') || '{}'),
+      exportedAt: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'eng_archive_backup.json'; a.click();
+    URL.revokeObjectURL(url);
+  }
 
-// ══════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════
-function renderAll() {
-  renderAbout();
-  renderTopicCards();
-  renderPosts();
-  renderResources();
-  updateToc();
-}
-renderAll();
+  function resetPosts() {
+    if (confirm('모든 글을 삭제할까요? 이 작업은 되돌릴 수 없습니다.')) {
+      localStorage.removeItem('eng_posts');
+      posts = [];
+      renderDefaultTopics();
+      renderCustomTopics();
+    }
+  }
+
+  function resetTopics() {
+    if (confirm('커스텀 토픽을 모두 삭제할까요?')) {
+      customTopics = [];
+      saveCustomTopics();
+      renderCustomTopics();
+    }
+  }
+
+  // ── INIT ──
+  renderDefaultTopics();
+  renderCustomTopics();
 </script>
 </body>
 </html>
