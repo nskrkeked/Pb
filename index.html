@@ -3,582 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Engineering Archive</title>
-  <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
-
-/* ══════════════════════════════════════════
-   VARIABLES & RESET
-══════════════════════════════════════════ */
-:root {
-  --bg: #0d0d0d;
-  --surface: #141414;
-  --surface2: #1c1c1c;
-  --border: #2a2a2a;
-  --border-bright: #404040;
-  --accent: #e8ff47;
-  --accent2: #47b4ff;
-  --text: #e8e8e8;
-  --text-muted: #666;
-  --text-dim: #999;
-  --mono: 'Space Mono', monospace;
-  --sans: 'Syne', sans-serif;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body {
-  font-family: var(--sans);
-  background: var(--bg);
-  color: var(--text);
-  overflow-x: hidden;
-}
-
-/* ══════════════════════════════════════════
-   BACKGROUND
-══════════════════════════════════════════ */
-.background-grid {
-  position: fixed; inset: 0;
-  background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 48px 48px;
-  z-index: -2; opacity: 0.4;
-}
-.scanline {
-  position: fixed; inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-  z-index: -1; pointer-events: none;
-}
-
-/* ══════════════════════════════════════════
-   TOP NAV
-══════════════════════════════════════════ */
-.topnav {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 80px;
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 0;
-  background: rgba(13,13,13,0.92);
-  backdrop-filter: blur(12px);
-  z-index: 50;
-}
-.nav-logo { font-family:var(--mono); font-size:0.85rem; font-weight:700; color:var(--accent); letter-spacing:0.12em; }
-.nav-links { display:flex; align-items:center; gap:8px; }
-.nav-item {
-  font-family:var(--mono); font-size:0.72rem; color:var(--text-muted);
-  background:none; border:1px solid var(--border); padding:6px 14px;
-  cursor:pointer; letter-spacing:0.06em; transition:0.2s; text-decoration:none;
-}
-.nav-item:hover { color:var(--accent2); border-color:var(--accent2); }
-.admin-link:hover { color:var(--accent); border-color:var(--accent); }
-
-/* ══════════════════════════════════════════
-   HERO
-══════════════════════════════════════════ */
-.hero {
-  min-height: 100vh;
-  display: grid; grid-template-columns: 1fr 1fr;
-  position: relative; overflow: hidden;
-  border-bottom: 1px solid var(--border);
-}
-.hero-left { position: relative; }
-.hero-right {
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 80px 80px 80px 40px;
-}
-.hero-eyebrow { display:flex; align-items:center; gap:12px; margin-bottom:24px; }
-.eyebrow-line { display:inline-block; width:32px; height:1px; background:var(--accent2); }
-.eyebrow-text { font-family:var(--mono); font-size:0.7rem; color:var(--accent2); letter-spacing:0.12em; }
-.hero-title { font-family:var(--sans); font-size:4rem; font-weight:800; line-height:1.1; letter-spacing:-0.03em; margin-bottom:20px; }
-.accent { color: var(--accent); }
-.hero-sub { font-size:1rem; line-height:1.9; color:var(--text-dim); margin-bottom:36px; }
-.hero-cta-row { display:flex; gap:12px; margin-bottom:40px; flex-wrap:wrap; }
-.btn-cta {
-  font-family:var(--mono); font-size:0.8rem; background:var(--accent); color:#000;
-  border:none; padding:13px 24px; cursor:pointer; font-weight:700;
-  letter-spacing:0.08em; text-decoration:none; transition:0.2s; display:inline-block;
-}
-.btn-cta:hover { background:#fff; }
-.btn-cta-ghost {
-  font-family:var(--mono); font-size:0.8rem; background:none; color:var(--text);
-  border:1px solid var(--border-bright); padding:13px 24px; cursor:pointer;
-  letter-spacing:0.08em; text-decoration:none; transition:0.2s; display:inline-block;
-}
-.btn-cta-ghost:hover { border-color:var(--accent); color:var(--accent); }
-.hero-stats { display:flex; align-items:center; gap:24px; padding:20px 0; border-top:1px solid var(--border); }
-.stat { display:flex; flex-direction:column; gap:4px; }
-.stat span { font-family:var(--mono); font-size:1.8rem; font-weight:700; color:var(--accent); }
-.stat small { font-family:var(--mono); font-size:0.65rem; color:var(--text-muted); letter-spacing:0.12em; }
-.stat-div { width:1px; height:40px; background:var(--border-bright); }
-
-/* hero windows */
-.window {
-  position: absolute; background:var(--surface); border:1px solid var(--border-bright);
-  padding:20px 25px; font-family:var(--mono); font-size:1.5rem; font-weight:700;
-  color:var(--text); transition:0.3s; z-index:2;
-}
-.window:hover { border-color:var(--accent); transform:translate(-4px,-4px); box-shadow:4px 4px 0 var(--accent); color:var(--accent); }
-.title-bar {
-  height:28px; background:var(--surface2); margin:-20px -25px 15px -25px;
-  border-bottom:1px solid var(--border-bright); display:flex; align-items:center; padding:0 12px; gap:6px;
-}
-.dot { width:10px; height:10px; border-radius:50%; }
-.dot.r { background:#ff5f57; } .dot.y { background:#febc2e; } .dot.g { background:#28c840; }
-.w1 { top:130px; left:80px; } .w2 { top:260px; left:280px; } .w3 { top:400px; left:120px; }
-
-/* ══════════════════════════════════════════
-   ABOUT
-══════════════════════════════════════════ */
-.about-section { padding:40px 80px; border-bottom:1px solid var(--border); background:var(--surface); }
-.about-inner { max-width:900px; display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin:0 auto; }
-.about-left { flex:1; }
-.about-text { font-size:0.95rem; line-height:1.9; color:var(--text-dim); margin-top:8px; }
-
-/* ══════════════════════════════════════════
-   PAGE LAYOUT & TOC
-══════════════════════════════════════════ */
-.page-layout { display:flex; position:relative; }
-.toc {
-  position:sticky; top:57px; width:220px; flex-shrink:0;
-  height:calc(100vh - 57px); padding:48px 24px 24px 40px;
-  border-right:1px solid var(--border);
-  opacity:0; pointer-events:none; transition:opacity 0.3s;
-}
-.toc.toc-visible { opacity:1; pointer-events:auto; }
-.toc-label { font-family:var(--mono); font-size:0.65rem; color:var(--text-muted); letter-spacing:0.15em; margin-bottom:20px; }
-.toc-nav { display:flex; flex-direction:column; gap:4px; }
-.toc-link {
-  display:flex; align-items:center; gap:10px; padding:8px 10px;
-  text-decoration:none; color:var(--text-muted); font-family:var(--mono); font-size:0.72rem;
-  transition:0.2s; border-left:2px solid transparent;
-}
-.toc-link:hover { color:var(--text); border-left-color:var(--border-bright); }
-.toc-link.active { color:var(--accent); border-left-color:var(--accent); }
-.toc-num { font-size:0.6rem; opacity:0.5; }
-.toc-progress { width:2px; background:var(--border); height:80px; margin-top:24px; margin-left:10px; overflow:hidden; }
-.toc-progress-bar { width:100%; background:var(--accent); transition:height 0.1s; }
-
-/* ══════════════════════════════════════════
-   MAIN CONTENT & SECTIONS
-══════════════════════════════════════════ */
-.main-content { flex:1; min-width:0; }
-.section { padding:80px 60px; border-bottom:1px solid var(--border); }
-.section-label { font-family:var(--mono); font-size:0.7rem; color:var(--text-muted); letter-spacing:0.15em; margin-bottom:16px; }
-.section-head { margin-bottom:40px; }
-.section-head h2 { font-size:2rem; font-weight:800; letter-spacing:-0.02em; margin-bottom:6px; }
-.section-desc { font-size:0.88rem; color:var(--text-muted); }
-.section-head-row { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; }
-
-/* ══════════════════════════════════════════
-   TOPIC CARDS
-══════════════════════════════════════════ */
-.cards {
-  display:grid; grid-template-columns:repeat(2,1fr);
-  gap:1px; background:var(--border); border:1px solid var(--border);
-}
-.card {
-  background:var(--surface); padding:36px; position:relative; transition:0.25s; cursor:pointer;
-}
-.card:hover { background:var(--surface2); }
-.card:hover h3 { color:var(--accent); }
-.card:hover .card-line { width:100%; }
-.card-link { text-decoration:none; color:inherit; display:block; }
-.card-num { font-family:var(--mono); font-size:0.7rem; color:var(--text-muted); margin-bottom:16px; letter-spacing:0.1em; }
-.card-icon-sm { font-size:1.3rem; margin-bottom:12px; }
-.card h3 { font-family:var(--sans); font-size:1.4rem; font-weight:600; margin-bottom:10px; transition:color 0.2s; }
-.card p { font-size:0.9rem; color:var(--text-muted); line-height:1.6; }
-.card-arrow {
-  position:absolute; top:32px; right:32px; font-family:var(--mono);
-  font-size:1.1rem; color:var(--text-muted); transition:0.25s;
-}
-.card:hover .card-arrow { color:var(--accent); transform:translateX(4px); }
-.card-line {
-  position:absolute; bottom:0; left:0; height:2px; width:0;
-  background:var(--accent); transition:width 0.4s ease;
-}
-
-/* ══════════════════════════════════════════
-   POSTS
-══════════════════════════════════════════ */
-.btn-write {
-  font-family:var(--mono); font-size:0.8rem; font-weight:700;
-  background:var(--accent); color:#000; border:none; padding:12px 22px;
-  cursor:pointer; letter-spacing:0.08em; transition:0.2s; white-space:nowrap;
-}
-.btn-write:hover { background:#fff; transform:translateY(-2px); }
-
-.empty-state {
-  display:flex; flex-direction:column; align-items:center; gap:16px;
-  padding:80px 40px; border:1px dashed var(--border-bright); color:var(--text-muted);
-}
-.empty-icon { font-family:var(--mono); font-size:2rem; }
-.empty-state p { font-size:0.9rem; text-align:center; line-height:1.8; }
-
-/* 포스트 카드 */
-.post-item {
-  background:var(--surface); border:1px solid var(--border);
-  border-left:3px solid var(--border-bright);
-  margin-bottom:10px; transition:border-color 0.2s, background 0.2s;
-  overflow:hidden;
-}
-.post-item:hover { border-color:var(--border-bright); border-left-color:var(--accent); }
-
-/* 포스트 요약 (클릭 가능한 헤더) */
-.post-summary {
-  padding:24px 28px 20px;
-  cursor:pointer; outline:none; user-select:none;
-}
-.post-summary:hover .post-title { color:var(--accent); }
-.post-meta { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
-.post-topic {
-  font-family:var(--mono); font-size:0.65rem; background:var(--accent);
-  color:#000; padding:3px 10px; letter-spacing:0.08em; font-weight:700;
-}
-.post-date { font-family:var(--mono); font-size:0.7rem; color:var(--text-muted); }
-.post-summary-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; }
-.post-title { font-size:1.15rem; font-weight:600; transition:color 0.2s; }
-.post-chevron { font-family:var(--mono); font-size:0.85rem; color:var(--text-muted); flex-shrink:0; transition:color 0.2s; }
-.post-excerpt { font-size:0.88rem; color:var(--text-muted); line-height:1.7; }
-
-/* 펼쳐진 상태 */
-.post-item.post-expanded { border-left-color:var(--accent); background:var(--surface2); }
-.post-item.post-expanded .post-chevron { color:var(--accent); }
-
-/* 펼침 바디 - grid 트랜지션 */
-.post-body {
-  display:grid; grid-template-rows:0fr;
-  transition:grid-template-rows 0.3s ease;
-  overflow:hidden;
-}
-.post-body-inner { overflow:hidden; min-height:0; }
-.post-item.post-expanded .post-body { grid-template-rows:1fr; }
-
-.post-body-content {
-  font-size:0.93rem; line-height:1.88; color:var(--text-dim);
-  white-space:pre-wrap; padding:20px 28px 4px;
-  border-top:1px solid var(--border);
-}
-.post-footer-row {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:14px 28px 20px; margin-top:4px;
-}
-
-/* ══════════════════════════════════════════
-   REF BAR
-══════════════════════════════════════════ */
-.ref-bar {
-  background:var(--surface2); border:1px solid var(--border-bright);
-  border-left:3px solid var(--accent2); padding:10px 16px; margin:12px 28px 0;
-}
-.ref-bar-inner { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.ref-bar-label { font-family:var(--mono); font-size:0.7rem; color:var(--text-muted); letter-spacing:0.06em; }
-.ref-bar-link { font-family:var(--mono); font-size:0.75rem; color:var(--accent2); text-decoration:none; transition:0.2s; }
-.ref-bar-link:hover { opacity:0.75; }
-
-/* ══════════════════════════════════════════
-   RESOURCES
-══════════════════════════════════════════ */
-.resource-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
-.resource-box { background:var(--surface); border:1px solid var(--border); padding:32px; transition:0.2s; }
-.resource-box:hover { border-color:var(--border-bright); background:var(--surface2); }
-.resource-icon { font-size:1.8rem; margin-bottom:16px; }
-.resource-info h3 { font-size:1.1rem; font-weight:600; margin-bottom:6px; }
-.resource-info p { font-size:0.85rem; color:var(--text-muted); margin-bottom:20px; }
-.resource-links { display:flex; flex-direction:column; gap:8px; }
-.res-link {
-  font-family:var(--mono); font-size:0.8rem; color:var(--accent2);
-  text-decoration:none; padding:8px 12px; border:1px solid var(--border); transition:0.2s; display:block;
-}
-.res-link:hover { border-color:var(--accent2); background:rgba(71,180,255,0.06); transform:translateX(4px); }
-.res-empty { font-family:var(--mono); font-size:0.75rem; color:var(--text-muted); }
-
-/* 포스트 첨부 참고자료 박스 */
-.resource-box-refs { border-left:3px solid var(--accent2); }
-.res-link-post { display:flex; align-items:center; gap:10px; }
-.res-link-post-topic {
-  font-family:var(--mono); font-size:0.6rem; background:var(--accent2);
-  color:#000; padding:2px 7px; letter-spacing:0.05em; flex-shrink:0; font-weight:700;
-}
-
-/* ══════════════════════════════════════════
-   BUTTONS
-══════════════════════════════════════════ */
-.btn-edit-sm {
-  font-family:var(--mono); font-size:0.68rem; background:none; color:var(--text-muted);
-  border:1px solid var(--border); padding:5px 12px; cursor:pointer; transition:0.2s; white-space:nowrap; flex-shrink:0;
-}
-.btn-edit-sm:hover { color:var(--accent); border-color:var(--accent); }
-.btn-delete-sm {
-  font-family:var(--mono); font-size:0.65rem; background:none; color:var(--text-muted);
-  border:1px solid var(--border); padding:4px 10px; cursor:pointer; transition:0.2s;
-}
-.btn-delete-sm:hover { color:#ff5f57; border-color:#ff5f57; }
-.btn-danger {
-  font-family:var(--mono); font-size:0.72rem; background:none; color:#ff5f57;
-  border:1px solid #ff5f57; padding:9px 16px; cursor:pointer; font-weight:700; letter-spacing:0.07em; transition:0.2s;
-}
-.btn-danger:hover { background:rgba(255,95,87,.1); }
-
-/* ══════════════════════════════════════════
-   MODALS
-══════════════════════════════════════════ */
-.modal-overlay {
-  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85);
-  z-index:100; align-items:center; justify-content:center; backdrop-filter:blur(4px);
-}
-.modal-overlay.active { display:flex; }
-.modal {
-  background:var(--surface); border:1px solid var(--border-bright);
-  width:100%; max-width:600px; max-height:90vh; overflow-y:auto;
-  animation:modalIn 0.2s ease;
-}
-.modal-sm  { max-width:400px; }
-.modal-wide { max-width:720px; }
-.modal-detail { max-width:700px; }
-@keyframes modalIn {
-  from { opacity:0; transform:translateY(16px) scale(0.97); }
-  to   { opacity:1; transform:translateY(0) scale(1); }
-}
-.modal-header {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:18px 24px; border-bottom:1px solid var(--border);
-}
-.modal-title { font-family:var(--mono); font-size:0.8rem; color:var(--accent); letter-spacing:0.1em; }
-.modal-close {
-  background:none; border:none; color:var(--text-muted); font-size:1rem;
-  cursor:pointer; transition:color 0.2s; font-family:var(--mono);
-}
-.modal-close:hover { color:var(--text); }
-.modal-body { padding:28px 24px; display:flex; flex-direction:column; gap:20px; }
-
-.form-group { display:flex; flex-direction:column; gap:8px; }
-.form-group label { font-family:var(--mono); font-size:0.68rem; color:var(--text-muted); letter-spacing:0.12em; }
-.form-group input,
-.form-group select,
-.form-group textarea {
-  background:var(--bg); border:1px solid var(--border-bright); color:var(--text);
-  font-family:var(--sans); font-size:0.95rem; padding:12px 14px; outline:none; transition:border-color 0.2s; width:100%;
-}
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--accent); }
-.form-group textarea { min-height:160px; resize:vertical; line-height:1.7; }
-.form-group select option { background:var(--surface); }
-
-.modal-actions { display:flex; justify-content:flex-end; gap:12px; padding-top:8px; }
-.btn-cancel {
-  font-family:var(--mono); font-size:0.75rem; background:none; color:var(--text-muted);
-  border:1px solid var(--border); padding:10px 20px; cursor:pointer; letter-spacing:0.08em; transition:0.2s;
-}
-.btn-cancel:hover { border-color:var(--text-muted); color:var(--text); }
-.btn-submit {
-  font-family:var(--mono); font-size:0.75rem; background:var(--accent); color:#000;
-  border:none; padding:10px 24px; cursor:pointer; font-weight:700; letter-spacing:0.08em; transition:0.2s;
-}
-.btn-submit:hover { background:#fff; transform:translateY(-1px); }
-
-/* detail modal */
-.detail-date { font-family:var(--mono); font-size:0.7rem; color:var(--text-muted); margin-bottom:10px; letter-spacing:0.08em; }
-.detail-title { font-size:1.7rem; font-weight:800; letter-spacing:-0.02em; margin-bottom:24px; line-height:1.2; }
-.detail-content { font-size:0.95rem; line-height:1.9; color:var(--text-dim); white-space:pre-wrap; border-top:1px solid var(--border); padding-top:22px; margin-bottom:16px; }
-
-/* auth hint */
-.auth-hint { font-family:var(--mono); font-size:0.75rem; color:#ff5f57; min-height:20px; margin-top:-8px; }
-
-/* manage modal */
-.manage-add-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid var(--border); }
-.manage-input {
-  font-family:var(--sans); font-size:0.9rem; background:var(--bg);
-  border:1px solid var(--border-bright); color:var(--text); padding:10px 12px;
-  flex:1; outline:none; transition:border-color 0.2s; min-width:120px;
-}
-.manage-input:focus { border-color:var(--accent); }
-.icon-input { max-width:70px; flex:none; text-align:center; font-size:1.2rem; }
-.manage-list { display:flex; flex-direction:column; gap:6px; max-height:360px; overflow-y:auto; }
-.manage-row { display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border); padding:12px 16px; }
-.manage-icon { font-size:1.2rem; flex-shrink:0; }
-.manage-name { font-weight:600; font-size:0.9rem; min-width:120px; }
-.manage-desc { font-size:0.82rem; color:var(--text-muted); flex:1; }
-.manage-url { font-family:var(--mono); font-size:0.7rem; color:var(--accent2); text-decoration:none; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.manage-url:hover { opacity:0.75; }
-.manage-badge { font-family:var(--mono); font-size:0.6rem; color:var(--text-muted); border:1px solid var(--border); padding:2px 8px; letter-spacing:0.06em; flex-shrink:0; }
-.manage-empty { font-family:var(--mono); font-size:0.8rem; color:var(--text-muted); text-align:center; padding:24px; }
-
-/* admin grid */
-.admin-data-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
-.admin-data-card { background:var(--bg); border:1px solid var(--border); padding:20px; }
-.admin-data-icon { font-size:1.4rem; margin-bottom:10px; }
-.admin-data-card h3 { font-size:0.9rem; font-weight:600; margin-bottom:6px; }
-.admin-data-card p { font-size:0.8rem; color:var(--text-muted); line-height:1.6; }
-
-/* ══════════════════════════════════════════
-   PROFILE SECTION
-══════════════════════════════════════════ */
-.profile-section {
-  padding: 80px 80px;
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-}
-
-.profile-container {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.profile-label {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  letter-spacing: 0.15em;
-  margin-bottom: 24px;
-}
-
-.profile-content {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 40px;
-  align-items: flex-start;
-}
-
-.profile-avatar {
-  width: 140px;
-  height: 140px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border: 2px solid var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: #000;
-  flex-shrink: 0;
-}
-
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.profile-header {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.profile-name {
-  font-size: 1.8rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
-.profile-name-sub {
-  color: var(--accent);
-}
-
-.profile-title {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--accent2);
-  letter-spacing: 0.12em;
-  font-weight: 700;
-}
-
-.profile-description {
-  font-size: 0.95rem;
-  color: var(--text-dim);
-  line-height: 1.8;
-}
-
-.profile-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.profile-tags .tag {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  border: 1px solid var(--border-bright);
-  padding: 6px 12px;
-  letter-spacing: 0.08em;
-  transition: 0.2s;
-}
-
-.profile-tags .tag:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
-.profile-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.profile-links {
-  display: flex;
-  gap: 12px;
-  flex: 1;
-}
-
-.profile-link {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  color: var(--accent2);
-  border: 1px solid var(--border-bright);
-  padding: 10px 18px;
-  text-decoration: none;
-  cursor: pointer;
-  letter-spacing: 0.08em;
-  transition: 0.2s;
-  display: inline-block;
-  font-weight: 600;
-}
-
-.profile-link:hover {
-  border-color: var(--accent2);
-  background: rgba(71, 180, 255, 0.08);
-  transform: translateY(-2px);
-}
-
-/* ══════════════════════════════════════════
-   FOOTER
-══════════════════════════════════════════ */
-footer { padding:40px 80px; }
-.footer-inner {
-  display:flex; align-items:center; justify-content:space-between;
-  border-top:1px solid var(--border); padding-top:32px;
-}
-.footer-logo { font-family:var(--mono); font-size:0.85rem; font-weight:700; color:var(--accent); letter-spacing:0.1em; }
-.footer-copy { font-family:var(--mono); font-size:0.7rem; color:var(--text-muted); letter-spacing:0.05em; }
-
-/* ══════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════ */
-@media (max-width:900px) {
-  .topnav { padding:14px 20px; }
-  .hero { grid-template-columns:1fr; min-height:auto; }
-  .hero-right { padding:40px 24px; }
-  .hero-title { font-size:2.6rem; }
-  .w1,.w2,.w3 { display:none; }
-  .toc { display:none; }
-  .section { padding:60px 24px; }
-  .about-section { padding:28px 24px; }
-  .cards { grid-template-columns:1fr; }
-  .resource-grid { grid-template-columns:1fr; }
-  footer { padding:30px 24px; }
-  .footer-inner { flex-direction:column; gap:12px; text-align:center; }
-  .admin-data-grid { grid-template-columns:1fr; }
-  .manage-add-row { flex-direction:column; }
-  .profile-section { padding:50px 24px; }
-  .profile-content { grid-template-columns:1fr; gap:24px; }
-  .profile-avatar { width:100px; height:100px; font-size:2.5rem; }
-  .profile-name { font-size:1.4rem; }
-  .profile-actions { flex-direction:column; align-items:flex-start; }
-  .profile-links { width:100%; }
-  .profile-link { width:100%; text-align:center; }
-}
-  </style>
+  <title>Engineering_Archive</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="background-grid"></div>
@@ -619,63 +46,43 @@ footer { padding:40px 80px; }
   </div>
 </header>
 
-<!-- ═══ ABOUT ═══ -->
-<section class="about-section" id="about">
-  <div class="about-inner">
-    <div class="about-left">
-      <div class="section-label">// ABOUT</div>
-      <div class="about-text" id="aboutText">
-        안녕하세요. 공학을 좋아하는 학생입니다.<br>
-        이 아카이브는 제가 배운 개념들을 정리하고 공유하는 공간입니다.
-      </div>
-    </div>
-    <button class="btn-edit-sm" onclick="requireAuth(openAboutEdit)">✎ 수정</button>
-  </div>
-</section>
-
-<!-- ═══ PAGE LAYOUT ═══ -->
+<!-- ═══ MAIN LAYOUT ═══ -->
 <div class="page-layout">
+
+  <!-- LEFT TOC -->
   <aside class="toc" id="toc">
     <div class="toc-label">// 목차</div>
     <nav class="toc-nav">
-      <a href="#topics" class="toc-link" data-section="topics"><span class="toc-num">01</span><span class="toc-text">Topics</span></a>
-      <a href="#posts" class="toc-link" data-section="posts"><span class="toc-num">02</span><span class="toc-text">Posts</span></a>
-      <a href="#resources" class="toc-link" data-section="resources"><span class="toc-num">03</span><span class="toc-text">Resources</span></a>
+      <a href="#topics" class="toc-link" data-section="topics"><span class="toc-num">01</span><span class="toc-text">Main Topics</span></a>
+      <a href="#posts"  class="toc-link" data-section="posts"><span class="toc-num">02</span><span class="toc-text">Archive Posts</span></a>
+      <a href="#resources" class="toc-link" data-section="resources"><span class="toc-num">03</span><span class="toc-text">Learning Resources</span></a>
     </nav>
     <div class="toc-progress"><div class="toc-progress-bar" id="tocProgress"></div></div>
   </aside>
 
+  <!-- MAIN CONTENT -->
   <main class="main-content">
-    <!-- 01 TOPICS -->
+
+    <!-- ── 01 TOPICS ── -->
     <section class="section" id="topics">
       <div class="section-head">
         <div class="section-label">01 / MAIN TOPICS</div>
         <div class="section-head-row">
-          <div>
-            <h2>Main Topics</h2>
-            <p class="section-desc">토픽을 선택하면 관련 글과 자료를 모아볼 수 있습니다.</p>
-          </div>
+          <div><h2>Main Topics</h2><p class="section-desc">토픽을 선택하면 관련 글과 자료를 모아볼 수 있습니다.</p></div>
           <button class="btn-write" onclick="requireAuth(openTopicManage)">+ 토픽 추가</button>
         </div>
       </div>
       <div class="cards" id="topicCards"></div>
     </section>
 
-    <!-- 02 POSTS -->
+    <!-- ── 02 POSTS ── -->
     <section class="section" id="posts">
       <div class="section-head">
         <div class="section-label">02 / POSTS</div>
         <div class="section-head-row">
-          <div>
-            <h2>Archive Posts</h2>
-            <p class="section-desc">작성된 모든 글을 최신순으로 볼 수 있습니다.</p>
-          </div>
+          <div><h2>Archive Posts</h2><p class="section-desc">작성된 모든 글을 최신순으로 볼 수 있습니다.</p></div>
           <button class="btn-write" id="openModal">+ NEW POST</button>
         </div>
-      </div>
-      <div id="postsFilter" style="display:none;margin-bottom:20px;">
-        <button class="btn-write" onclick="filterPostsByTopic(null)" id="filterAll">모든 주제 보기</button>
-        <div id="topicFilterButtons" style="display:inline-flex;gap:10px;margin-left:10px;flex-wrap:wrap;"></div>
       </div>
       <div class="posts-list" id="postsList">
         <div class="empty-state" id="emptyState">
@@ -685,24 +92,23 @@ footer { padding:40px 80px; }
       </div>
     </section>
 
-    <!-- 03 RESOURCES -->
+    <!-- ── 03 RESOURCES ── -->
     <section class="section" id="resources">
       <div class="section-head">
         <div class="section-label">03 / LEARNING RESOURCES</div>
         <div class="section-head-row">
-          <div>
-            <h2>Learning Resources</h2>
-            <p class="section-desc">학습에 도움이 되는 영상, 논문, 아티클 모음입니다.</p>
-          </div>
+          <div><h2>Learning Resources</h2><p class="section-desc">학습에 도움이 되는 영상, 논문, 아티클 모음입니다.</p></div>
           <button class="btn-write" onclick="requireAuth(openResourceManage)">+ 자료 추가</button>
         </div>
       </div>
       <div class="resource-grid" id="resourceGrid"></div>
     </section>
+
   </main>
 </div>
+<!-- ═══ ABOUT ME PROFILE SECTION  ═══ -->
+</footer>
 
-<!-- ═══ PROFILE ═══ -->
 <section class="profile-section" id="profile">
   <div class="profile-container">
     <div class="profile-label">// IDENTIFICATION</div>
@@ -735,6 +141,7 @@ footer { padding:40px 80px; }
     </div>
   </div>
 </section>
+    
 
 <footer>
   <div class="footer-inner">
@@ -742,15 +149,16 @@ footer { padding:40px 80px; }
     <span class="footer-copy">// 공학 지식은 세상을 움직이는 언어입니다.</span>
   </div>
 </footer>
-
-<!-- MODALS -->
+<!-- ════════════════════════════════════════
+     MODALS
+════════════════════════════════════════ -->
 
 <!-- 🔐 AUTH MODAL -->
 <div class="modal-overlay" id="authOverlay">
   <div class="modal modal-sm">
     <div class="modal-header"><span class="modal-title">// 관리자 인증</span><button class="modal-close" onclick="closeModal('authOverlay')">✕</button></div>
     <div class="modal-body">
-      <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:16px">이 기능은 관리자만 사용할 수 있습니다.</p>
+      <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:16px">이 기능은 관리자만 사용할 수 있습니다.</p>
       <div class="form-group"><label>PASSWORD</label><input type="password" id="authInput" placeholder="비밀번호 입력" /></div>
       <div class="auth-hint" id="authHint"></div>
       <div class="modal-actions">
@@ -773,6 +181,7 @@ footer { padding:40px 80px; }
         <label>REFERENCE URL (선택)</label>
         <input type="text" id="postRef" placeholder="https://..." />
       </div>
+      <!-- 참고자료 바 -->
       <div class="ref-bar" id="refBar" style="display:none">
         <div class="ref-bar-inner">
           <span class="ref-bar-label">📎 참고자료</span>
@@ -787,17 +196,44 @@ footer { padding:40px 80px; }
   </div>
 </div>
 
+<!-- 📖 POST DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal modal-detail">
+    <div class="modal-header">
+      <span class="modal-title" id="detailTopic">—</span>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn-edit-sm" id="detailEditBtn">✎ 수정</button>
+        <button class="modal-close" onclick="closeModal('detailModal')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="detail-date" id="detailDate"></div>
+      <h2 class="detail-title" id="detailTitle"></h2>
+      <div class="detail-content" id="detailContent"></div>
+      <!-- 참고자료 바 -->
+      <div class="ref-bar" id="detailRefBar" style="display:none">
+        <div class="ref-bar-inner">
+          <span class="ref-bar-label">📎 참고자료</span>
+          <a class="ref-bar-link" id="detailRefLink" href="#" target="_blank">외부 사이트로 이동 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 🗂 TOPIC MANAGE MODAL -->
 <div class="modal-overlay" id="topicModal">
   <div class="modal modal-wide">
     <div class="modal-header"><span class="modal-title">// 토픽 관리</span><button class="modal-close" onclick="closeModal('topicModal')">✕</button></div>
     <div class="modal-body">
+      <!-- 추가 폼 -->
       <div class="manage-add-row">
         <input type="text" id="newTopicName" placeholder="토픽 이름 (예: Optics)" class="manage-input" />
         <input type="text" id="newTopicDesc" placeholder="한 줄 설명" class="manage-input" />
         <input type="text" id="newTopicIcon" placeholder="이모지 🔬" class="manage-input icon-input" maxlength="2" />
         <button class="btn-submit" onclick="addTopic()">ADD →</button>
       </div>
+      <!-- 리스트 -->
       <div class="manage-list" id="topicManageList"></div>
     </div>
   </div>
@@ -808,15 +244,17 @@ footer { padding:40px 80px; }
   <div class="modal modal-wide">
     <div class="modal-header"><span class="modal-title">// 참고자료 관리</span><button class="modal-close" onclick="closeModal('resourceModal')">✕</button></div>
     <div class="modal-body">
+      <!-- 추가 폼 -->
       <div class="manage-add-row">
         <select id="newResType" class="manage-input" style="max-width:130px">
           <option value="video">📺 Video</option>
           <option value="paper">📄 Paper</option>
         </select>
         <input type="text" id="newResLabel" placeholder="자료 이름" class="manage-input" />
-        <input type="text" id="newResUrl" placeholder="https://..." class="manage-input" />
+        <input type="text" id="newResUrl"   placeholder="https://..." class="manage-input" />
         <button class="btn-submit" onclick="addResource()">ADD →</button>
       </div>
+      <!-- 리스트 -->
       <div class="manage-list" id="resourceManageList"></div>
     </div>
   </div>
@@ -831,20 +269,6 @@ footer { padding:40px 80px; }
       <div class="modal-actions">
         <button class="btn-cancel" onclick="closeModal('aboutModal')">CANCEL</button>
         <button class="btn-submit" onclick="saveAbout()">SAVE →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 👤 PROFILE EDIT MODAL -->
-<div class="modal-overlay" id="profileModal">
-  <div class="modal modal-sm">
-    <div class="modal-header"><span class="modal-title">// 프로필 수정</span><button class="modal-close" onclick="closeModal('profileModal')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group"><label>설명</label><textarea id="profileEdit" rows="4" placeholder="프로필 설명을 입력하세요..."></textarea></div>
-      <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeModal('profileModal')">CANCEL</button>
-        <button class="btn-submit" onclick="saveProfile()">SAVE →</button>
       </div>
     </div>
   </div>
@@ -907,7 +331,6 @@ function allTopics()    { return [...DEFAULT_TOPICS,    ...(get('eng_custom_topi
 function allResources() { return [...DEFAULT_RESOURCES, ...(get('eng_custom_resources') || [])] }
 
 let posts = get('eng_posts') || [];
-let currentTopicFilter = null;
 
 // ══════════════════════════════════════════
 // AUTH
@@ -923,7 +346,6 @@ function requireAuth(fn) {
   document.getElementById('authHint').textContent = '';
   openOverlay('authOverlay');
 }
-
 function submitAuth() {
   const pw = get('eng_password') || DEFAULT_PW;
   if (document.getElementById('authInput').value === pw) {
@@ -934,9 +356,7 @@ function submitAuth() {
     document.getElementById('authHint').textContent = '❌ 비밀번호가 틀렸습니다.';
   }
 }
-
 document.getElementById('authInput').addEventListener('keydown', e => { if (e.key==='Enter') submitAuth(); });
-
 function changePassword() {
   const v = document.getElementById('newPwInput').value.trim();
   if (!v) { alert('새 비밀번호를 입력하세요.'); return; }
@@ -951,6 +371,7 @@ function changePassword() {
 function openOverlay(id)  { document.getElementById(id).classList.add('active'); }
 function closeModal(id)   { document.getElementById(id).classList.remove('active'); }
 
+// close on backdrop click
 document.querySelectorAll('.modal-overlay').forEach(el => {
   el.addEventListener('click', e => { if (e.target === el) el.classList.remove('active'); });
 });
@@ -962,37 +383,15 @@ function renderAbout() {
   const txt = get('eng_about') || '안녕하세요. 공학을 좋아하는 학생입니다.<br>이 아카이브는 제가 배운 개념들을 정리하고 공유하는 공간입니다.';
   document.getElementById('aboutText').innerHTML = txt;
 }
-
 function openAboutEdit() {
   document.getElementById('aboutEdit').value = (get('eng_about') || '').replace(/<br>/g,'\n');
   openOverlay('aboutModal');
 }
-
 function saveAbout() {
   const v = document.getElementById('aboutEdit').value.trim().replace(/\n/g,'<br>');
   set('eng_about', v);
   renderAbout();
   closeModal('aboutModal');
-}
-
-// ══════════════════════════════════════════
-// PROFILE
-// ══════════════════════════════════════════
-function renderProfile() {
-  const desc = get('eng_profile_description') || '안녕하세요! 공학을 깊이 있게 탐구하는 개발자입니다.<br>반도체, FPGA, AI 하드웨어 등 다양한 분야를 학습하고 있습니다.<br>e-mail: nskrkeked@gmail.com';
-  document.getElementById('profileDescription').innerHTML = desc;
-}
-
-function openProfileEdit() {
-  document.getElementById('profileEdit').value = (get('eng_profile_description') || '').replace(/<br>/g,'\n');
-  openOverlay('profileModal');
-}
-
-function saveProfile() {
-  const v = document.getElementById('profileEdit').value.trim().replace(/\n/g,'<br>');
-  set('eng_profile_description', v);
-  renderProfile();
-  closeModal('profileModal');
 }
 
 // ══════════════════════════════════════════
@@ -1005,8 +404,7 @@ function renderTopicCards() {
   topics.forEach((t, i) => {
     const a = document.createElement('a');
     a.className = 'card card-link';
-    a.href = '#';
-    a.onclick = (e) => { e.preventDefault(); filterPostsByTopic(t.name); };
+    a.href = `topic.html?topic=${encodeURIComponent(t.name)}`;
     a.innerHTML = `
       <div class="card-num">${String(i+1).padStart(2,'0')}</div>
       <div class="card-icon-sm">${t.icon||'📁'}</div>
@@ -1017,32 +415,28 @@ function renderTopicCards() {
     container.appendChild(a);
   });
   document.getElementById('topic-count').textContent = topics.length;
+  // sync post modal select
   const sel = document.getElementById('postTopic');
   sel.innerHTML = '';
   topics.forEach(t => { const o=document.createElement('option'); o.value=t.name; o.textContent=t.name; sel.appendChild(o); });
-}
-
-function filterPostsByTopic(topicName) {
-  currentTopicFilter = topicName;
-  renderPosts();
-  document.getElementById('posts').scrollIntoView({ behavior:'smooth' });
 }
 
 function openTopicManage() {
   renderTopicManageList();
   openOverlay('topicModal');
 }
-
 function renderTopicManageList() {
   const custom = get('eng_custom_topics') || [];
   const list = document.getElementById('topicManageList');
   list.innerHTML = '';
+  // defaults (read-only)
   DEFAULT_TOPICS.forEach(t => {
     const row = document.createElement('div');
     row.className = 'manage-row';
     row.innerHTML = `<span class="manage-icon">${t.icon}</span><span class="manage-name">${t.name}</span><span class="manage-desc">${t.desc}</span><span class="manage-badge">기본</span>`;
     list.appendChild(row);
   });
+  // custom (deletable)
   custom.forEach((t, i) => {
     const row = document.createElement('div');
     row.className = 'manage-row';
@@ -1056,7 +450,6 @@ function renderTopicManageList() {
     list.appendChild(empty);
   }
 }
-
 function addTopic() {
   const name = document.getElementById('newTopicName').value.trim();
   const desc = document.getElementById('newTopicDesc').value.trim();
@@ -1070,7 +463,6 @@ function addTopic() {
   renderTopicManageList();
   renderTopicCards();
 }
-
 function deleteTopic(idx) {
   if (!confirm('이 토픽을 삭제할까요?')) return;
   const custom = get('eng_custom_topics') || [];
@@ -1103,12 +495,10 @@ function renderResources() {
     grid.appendChild(box);
   });
 }
-
 function openResourceManage() {
   renderResourceManageList();
   openOverlay('resourceModal');
 }
-
 function renderResourceManageList() {
   const custom = get('eng_custom_resources') || [];
   const list = document.getElementById('resourceManageList');
@@ -1126,7 +516,6 @@ function renderResourceManageList() {
     list.appendChild(row);
   });
 }
-
 function addResource() {
   const type  = document.getElementById('newResType').value;
   const label = document.getElementById('newResLabel').value.trim();
@@ -1140,7 +529,6 @@ function addResource() {
   renderResourceManageList();
   renderResources();
 }
-
 function deleteResource(idx) {
   if (!confirm('이 자료를 삭제할까요?')) return;
   const custom = get('eng_custom_resources') || [];
@@ -1158,19 +546,12 @@ let editingIdx = null;
 function renderPosts() {
   const list  = document.getElementById('postsList');
   const empty = document.getElementById('emptyState');
-  const filter = document.getElementById('postsFilter');
-  
   list.querySelectorAll('.post-item').forEach(e=>e.remove());
-  
-  const filteredPosts = currentTopicFilter ? posts.filter(p => p.topic === currentTopicFilter) : posts;
-  
-  if (filteredPosts.length===0) { empty.style.display='flex'; filter.style.display='none'; }
+  if (posts.length===0) { empty.style.display='flex'; }
   else {
     empty.style.display='none';
-    filter.style.display='block';
-    renderTopicFilterButtons();
-    filteredPosts.slice().reverse().forEach((post, ri) => {
-      const realIdx = posts.indexOf(post);
+    posts.slice().reverse().forEach((post, ri) => {
+      const realIdx = posts.length-1-ri;
       const el = document.createElement('div');
       el.className = 'post-item post-item-expandable';
       el.innerHTML = `
@@ -1189,9 +570,9 @@ function renderPosts() {
           <div class="post-body-inner">
             <div class="post-body-content">${post.content.replace(/\n/g,'<br>')}</div>
             ${post.ref ? `
-            <div class="ref-bar" style="margin:20px 28px 0">
+            <div class="ref-bar" style="margin-top:20px">
               <div class="ref-bar-inner">
-                <span class="ref-bar-label">📎 참고자료</span>
+                <span class="ref-bar-label">📎 첨부 참고자료</span>
                 <a class="ref-bar-link" href="${post.ref}" target="_blank" rel="noopener">외부 사이트로 이동 →</a>
               </div>
             </div>` : ''}
@@ -1206,10 +587,12 @@ function renderPosts() {
         </div>`;
 
       const summary = el.querySelector('.post-summary');
+      const body    = el.querySelector('.post-body');
       const chevron = el.querySelector('.post-chevron');
 
       summary.addEventListener('click', () => {
         const isOpen = el.classList.contains('post-expanded');
+        // 다른 열린 항목 닫기
         list.querySelectorAll('.post-item-expandable.post-expanded').forEach(other => {
           if (other !== el) {
             other.classList.remove('post-expanded');
@@ -1232,24 +615,10 @@ function renderPosts() {
     });
   }
   document.getElementById('post-count').textContent = posts.length;
-  renderPostRefs();
+  renderPostRefs(); // 참고자료 섹션에 포스트 ref 반영
 }
 
-function renderTopicFilterButtons() {
-  const container = document.getElementById('topicFilterButtons');
-  container.innerHTML = '';
-  const topics = allTopics();
-  topics.forEach(t => {
-    const btn = document.createElement('button');
-    btn.className = 'btn-write';
-    btn.textContent = t.name;
-    btn.style.fontSize = '0.7rem';
-    btn.style.padding = '8px 14px';
-    btn.onclick = () => filterPostsByTopic(t.name);
-    container.appendChild(btn);
-  });
-}
-
+// 포스트에 첨부된 참고자료를 Learning Resources 섹션에 표시
 function renderPostRefs() {
   const existing = document.getElementById('postRefBox');
   if (existing) existing.remove();
@@ -1277,6 +646,7 @@ function renderPostRefs() {
   grid.appendChild(box);
 }
 
+// write modal
 document.getElementById('openModal').addEventListener('click', () => {
   editingIdx = null;
   document.getElementById('postModalTitle').textContent = '// NEW POST';
@@ -1285,12 +655,12 @@ document.getElementById('openModal').addEventListener('click', () => {
   document.getElementById('refBar').style.display='none';
   openOverlay('postModal');
 });
-
 function closePostModal() {
   closeModal('postModal');
   editingIdx=null;
 }
 
+// ref bar preview
 document.getElementById('postRef').addEventListener('input', function() {
   const v = this.value.trim();
   const bar = document.getElementById('refBar');
@@ -1312,7 +682,6 @@ document.getElementById('submitPost').addEventListener('click', () => {
     posts.push({ title, topic, content, ref, date });
   }
   set('eng_posts', posts);
-  currentTopicFilter = null;
   renderPosts();
   closePostModal();
 });
@@ -1339,22 +708,36 @@ function deletePost(idx) {
   renderPosts();
 }
 
+function openDetailPost(post) {
+  document.getElementById('detailTopic').textContent = `// ${post.topic}`;
+  document.getElementById('detailDate').textContent  = post.edited ? `${post.date}  (수정됨 ${post.edited})` : post.date;
+  document.getElementById('detailTitle').textContent = post.title;
+  document.getElementById('detailContent').textContent = post.content;
+  const refBar  = document.getElementById('detailRefBar');
+  const refLink = document.getElementById('detailRefLink');
+  if (post.ref) { refBar.style.display='block'; refLink.href=post.ref; }
+  else refBar.style.display='none';
+  // edit button
+  const editBtn = document.getElementById('detailEditBtn');
+  const realIdx = posts.indexOf(post);
+  editBtn.onclick = () => requireAuth(() => { closeModal('detailModal'); openEditPost(realIdx); });
+  openOverlay('detailModal');
+}
+
 // ══════════════════════════════════════════
 // ADMIN PANEL
 // ══════════════════════════════════════════
 function openAdminPanel() { openOverlay('adminModal'); }
-
 function exportData() {
-  const data = { topics: allTopics(), posts, resources: allResources(), about: get('eng_about'), profile: get('eng_profile_description'), exportedAt: new Date().toISOString() };
+  const data = { topics: allTopics(), posts, resources: allResources(), about: get('eng_about'), exportedAt: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a'); a.href=url; a.download='eng_archive_backup.json'; a.click();
   URL.revokeObjectURL(url);
 }
-
 function resetAll() {
   if (!confirm('모든 데이터를 초기화할까요? 되돌릴 수 없습니다.')) return;
-  ['eng_posts','eng_custom_topics','eng_custom_resources','eng_about','eng_profile_description'].forEach(k=>localStorage.removeItem(k));
+  ['eng_posts','eng_custom_topics','eng_custom_resources','eng_about'].forEach(k=>localStorage.removeItem(k));
   posts=[];
   renderAll();
   closeModal('adminModal');
@@ -1376,7 +759,6 @@ function updateToc() {
   const hero = document.getElementById('top');
   document.getElementById('toc').classList.toggle('toc-visible', scrollY > (hero?.offsetHeight||600) - 100);
 }
-
 window.addEventListener('scroll', updateToc, { passive:true });
 
 document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -1391,13 +773,11 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 // ══════════════════════════════════════════
 function renderAll() {
   renderAbout();
-  renderProfile();
   renderTopicCards();
   renderPosts();
   renderResources();
   updateToc();
 }
-
 renderAll();
 </script>
 </body>
