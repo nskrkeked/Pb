@@ -1402,3 +1402,327 @@ renderAll();
 </script>
 </body>
 </html>
+</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="topicManageModal">
+  <div class="modal modal-wide">
+    <div class="modal-header"><span class="modal-title">// TOPIC MANAGEMENT</span><button class="modal-close" onclick="closeModal('topicManageModal')">✕</button></div>
+    <div class="modal-body">
+      <div class="manage-add-row">
+        <input type="text" id="newTopicIcon" class="manage-input icon-input" placeholder="Icon (e.g. 💾)">
+        <input type="text" id="newTopicName" class="manage-input" placeholder="토픽 이름">
+        <input type="text" id="newTopicDesc" class="manage-input" placeholder="짧은 설명">
+        <button class="btn-submit" onclick="addTopic()">ADD +</button>
+      </div>
+      <div class="manage-list" id="manageTopicList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="resManageModal">
+  <div class="modal modal-wide">
+    <div class="modal-header"><span class="modal-title">// RESOURCE MANAGEMENT</span><button class="modal-close" onclick="closeModal('resManageModal')">✕</button></div>
+    <div class="modal-body">
+      <div class="manage-add-row">
+        <select id="newResTopic" class="manage-input"></select>
+        <input type="text" id="newResName" class="manage-input" placeholder="자료 이름">
+        <input type="text" id="newResUrl" class="manage-input" placeholder="URL (https://...)">
+        <button class="btn-submit" onclick="addResource()">ADD +</button>
+      </div>
+      <div class="manage-list" id="manageResList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="adminPanel">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">// SYSTEM ADMINISTRATION</span><button class="modal-close" onclick="closeModal('adminPanel')">✕</button></div>
+    <div class="modal-body">
+      <div class="admin-data-grid">
+        <div class="admin-data-card">
+          <div class="admin-data-icon">💾</div>
+          <h3>Backup</h3>
+          <p>데이터를 JSON으로 내보냅니다.</p>
+          <button class="btn-edit-sm" onclick="exportData()" style="margin-top:10px">EXPORT</button>
+        </div>
+        <div class="admin-data-card">
+          <div class="admin-data-icon">🧹</div>
+          <h3>Clear</h3>
+          <p>모든 데이터를 초기화합니다.</p>
+          <button class="btn-delete-sm" onclick="clearAllData()" style="margin-top:10px">RESET ALL</button>
+        </div>
+        <div class="admin-data-card">
+          <div class="admin-data-icon">🔓</div>
+          <h3>Session</h3>
+          <p>관리자 세션을 종료합니다.</p>
+          <button class="btn-cancel" onclick="logout()" style="margin-top:10px">LOGOUT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   CORE LOGIC & DATA
+══════════════════════════════════════════ */
+let state = {
+    posts: JSON.parse(localStorage.getItem('eng_posts')) || [],
+    topics: JSON.parse(localStorage.getItem('eng_topics')) || [
+        { id: 1, name: 'Semiconductor', icon: '⚡', desc: '반도체 소자 및 공정 기술' },
+        { id: 2, name: 'Computer Architecture', icon: '🏛️', desc: '프로세서 구조 및 설계' }
+    ],
+    resources: JSON.parse(localStorage.getItem('eng_res')) || [],
+    isAdmin: false,
+    currentEditId: null,
+    filterTopic: null
+};
+
+// --- Initialization ---
+window.onload = () => {
+    renderAll();
+    setupEventListeners();
+    handleScroll();
+};
+
+function saveState() {
+    localStorage.setItem('eng_posts', JSON.stringify(state.posts));
+    localStorage.setItem('eng_topics', JSON.stringify(state.topics));
+    localStorage.setItem('eng_res', JSON.stringify(state.resources));
+    updateStats();
+}
+
+function updateStats() {
+    document.getElementById('post-count').innerText = state.posts.length;
+    document.getElementById('topic-count').innerText = state.topics.length;
+}
+
+/* ══════════════════════════════════════════
+   UI RENDERING
+══════════════════════════════════════════ */
+function renderAll() {
+    renderTopics();
+    renderPosts();
+    renderResources();
+    updateStats();
+}
+
+function renderTopics() {
+    const container = document.getElementById('topicCards');
+    const select = document.getElementById('postTopic');
+    const resSelect = document.getElementById('newResTopic');
+    const filterContainer = document.getElementById('topicFilterButtons');
+
+    container.innerHTML = state.topics.map((t, idx) => `
+        <div class="card" onclick="filterPostsByTopic('${t.name}')">
+            <div class="card-num">0${idx+1}</div>
+            <div class="card-icon-sm">${t.icon}</div>
+            <h3>${t.name}</h3>
+            <p>${t.desc}</p>
+            <div class="card-arrow">→</div>
+            <div class="card-line"></div>
+        </div>
+    `).join('');
+
+    const options = state.topics.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+    select.innerHTML = options;
+    resSelect.innerHTML = options;
+
+    filterContainer.innerHTML = state.topics.map(t => `
+        <button class="btn-edit-sm" onclick="filterPostsByTopic('${t.name}')">${t.name}</button>
+    `).join('');
+}
+
+function renderPosts() {
+    const list = document.getElementById('postsList');
+    const empty = document.getElementById('emptyState');
+    const filtered = state.filterTopic 
+        ? state.posts.filter(p => p.topic === state.filterTopic)
+        : state.posts;
+
+    if (filtered.length === 0) {
+        empty.style.display = 'flex';
+        list.querySelectorAll('.post-item').forEach(el => el.remove());
+        return;
+    }
+    empty.style.display = 'none';
+
+    const html = filtered.sort((a,b) => b.id - a.id).map(post => `
+        <div class="post-item" id="post-${post.id}">
+            <div class="post-summary" onclick="togglePost(${post.id})">
+                <div class="post-meta">
+                    <span class="post-topic">${post.topic}</span>
+                    <span class="post-date">${post.date}</span>
+                </div>
+                <div class="post-summary-row">
+                    <h3 class="post-title">${post.title}</h3>
+                    <span class="post-chevron">展开 [+]</span>
+                </div>
+                <p class="post-excerpt">${post.content.substring(0, 100)}...</p>
+            </div>
+            <div class="post-body">
+                <div class="post-body-inner">
+                    <div class="post-body-content">${post.content}</div>
+                    ${post.ref ? `
+                        <div class="ref-bar">
+                            <div class="ref-bar-inner">
+                                <span class="ref-bar-label">📎 관련 링크</span>
+                                <a href="${post.ref}" target="_blank" class="ref-bar-link">${post.ref} →</a>
+                            </div>
+                        </div>
+                    ` : ''}
+                    <div class="post-footer-row">
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn-edit-sm" onclick="editPost(${post.id})">EDIT</button>
+                            <button class="btn-delete-sm" onclick="deletePost(${post.id})">DELETE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    // Refresh list content
+    const existingItems = list.querySelectorAll('.post-item');
+    existingItems.forEach(item => item.remove());
+    empty.insertAdjacentHTML('afterend', html);
+}
+
+function renderResources() {
+    const grid = document.getElementById('resourceGrid');
+    const grouped = {};
+    state.topics.forEach(t => grouped[t.name] = []);
+    state.resources.forEach(r => {
+        if(grouped[r.topic]) grouped[r.topic].push(r);
+    });
+
+    grid.innerHTML = state.topics.map(t => `
+        <div class="resource-box">
+            <div class="resource-icon">${t.icon}</div>
+            <div class="resource-info">
+                <h3>${t.name} Refs</h3>
+                <p>${t.name} 관련 심화 학습 자료입니다.</p>
+                <div class="resource-links">
+                    ${grouped[t.name].length ? grouped[t.name].map(r => `
+                        <a href="${r.url}" target="_blank" class="res-link">${r.name} →</a>
+                    `).join('') : '<span class="res-empty">자료가 없습니다.</span>'}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+/* ══════════════════════════════════════════
+   ACTIONS & MODALS
+══════════════════════════════════════════ */
+function requireAuth(callback) {
+    if (state.isAdmin) {
+        callback();
+    } else {
+        openModal('authOverlay');
+        window.authCallback = callback;
+    }
+}
+
+function submitAuth() {
+    const pw = document.getElementById('authInput').value;
+    if (pw === 'admin123') { // Simple demo password
+        state.isAdmin = true;
+        closeModal('authOverlay');
+        if (window.authCallback) window.authCallback();
+    } else {
+        document.getElementById('authHint').innerText = "비밀번호가 틀렸습니다.";
+    }
+}
+
+function logout() {
+    state.isAdmin = false;
+    closeModal('adminPanel');
+    alert("Logged out.");
+}
+
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+// Post Handlers
+document.getElementById('openModal').onclick = () => {
+    state.currentEditId = null;
+    document.getElementById('postModalTitle').innerText = "// NEW POST";
+    document.getElementById('postTitle').value = "";
+    document.getElementById('postContent').value = "";
+    document.getElementById('postRef').value = "";
+    openModal('postModal');
+};
+
+document.getElementById('submitPost').onclick = () => {
+    const title = document.getElementById('postTitle').value;
+    const topic = document.getElementById('postTopic').value;
+    const content = document.getElementById('postContent').value;
+    const ref = document.getElementById('postRef').value;
+
+    if (!title || !content) return alert("제목과 내용을 입력하세요.");
+
+    if (state.currentEditId) {
+        const idx = state.posts.findIndex(p => p.id === state.currentEditId);
+        state.posts[idx] = { ...state.posts[idx], title, topic, content, ref };
+    } else {
+        state.posts.push({
+            id: Date.now(),
+            title, topic, content, ref,
+            date: new Date().toLocaleDateString()
+        });
+    }
+    saveState();
+    renderPosts();
+    closeModal('postModal');
+};
+
+function deletePost(id) {
+    if (!state.isAdmin) return requireAuth(() => deletePost(id));
+    if (confirm("정말 삭제하시겠습니까?")) {
+        state.posts = state.posts.filter(p => p.id !== id);
+        saveState();
+        renderPosts();
+    }
+}
+
+function togglePost(id) {
+    const el = document.getElementById(`post-${id}`);
+    el.classList.toggle('post-expanded');
+    const chevron = el.querySelector('.post-chevron');
+    chevron.innerText = el.classList.contains('post-expanded') ? '收起 [-]' : '展开 [+]';
+}
+
+function filterPostsByTopic(topic) {
+    state.filterTopic = topic;
+    document.getElementById('postsFilter').style.display = 'block';
+    document.getElementById('filterAll').innerText = topic ? `Filtering: ${topic} (Show All)` : '모든 주제 보기';
+    renderPosts();
+    document.getElementById('posts').scrollIntoView();
+}
+
+/* ══════════════════════════════════════════
+   SCROLL & TOC
+══════════════════════════════════════════ */
+function handleScroll() {
+    const toc = document.getElementById('toc');
+    const progress = document.getElementById('tocProgress');
+    const scrollPos = window.scrollY;
+    
+    // TOC Visibility
+    if (scrollPos > 400) toc.classList.add('toc-visible');
+    else toc.classList.remove('toc-visible');
+
+    // Progress Bar
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (scrollPos / height) * 100;
+    progress.style.height = scrolled + "%";
+}
+
+window.addEventListener('scroll', handleScroll);
+</script>
+</body>
+</html>
