@@ -163,7 +163,7 @@ body {
 .section-head-row { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; }
 
 /* ══════════════════════════════════════════
-   TOPIC CARDS
+   TOPIC CARDS (겹침 현상 해결 및 자동 레이아웃 수정)
 ══════════════════════════════════════════ */
 .cards {
   display:grid; grid-template-columns:repeat(2,1fr);
@@ -171,6 +171,7 @@ body {
 }
 .card {
   background:var(--surface); padding:36px; position:relative; transition:0.25s; cursor:pointer;
+  height: 100%; /* 카드 높이를 그리드에 맞춰 균일하게 고정 */
 }
 .card:hover { background:var(--surface2); }
 .card:hover h3 { color:var(--accent); }
@@ -190,19 +191,31 @@ body {
   background:var(--accent); transition:width 0.4s ease;
 }
 
-/* [추가] 모든 주제 보기 전용 스타일 블록 */
-.card.all-topics {
-  grid-column: span 2; 
-  padding: 24px 36px; 
-  border-bottom: 1px solid var(--border-bright);
+/* [★자동 보정 마법의 CSS] 
+  HTML을 안 고쳐도 첫 번째 자식('모든 주제 보기')의 겹침 현상을 강제 해제하고 원래 라임색 테마로 고정합니다.
+*/
+.cards > *:first-child {
+  grid-column: 1 / -1 !important; /* 무조건 가로 2칸을 혼자 다 채우도록 지정하여 절대 겹치지 않게 만듦 */
+  position: relative !important;   /* absolute 겹침 오작동 원천 차단 */
 }
-.card.all-topics h3 {
-  color: var(--accent);
-  font-size: 1.25rem;
-  margin-bottom: 0;
+.cards > *:first-child .card, 
+.cards > .card:first-child {
+  padding: 22px 36px !important;  /* 대메뉴 스타일로 얇고 깔끔하게 두께 축소 */
 }
-.card.all-topics .card-arrow {
-  top: 24px;
-  color: var(--accent);
+.cards > *:first-child h3 {
+  color: var(--accent) !important; /* 원래 고유 색상인 라임 옐로우 테마 적용 */
+  font-size: 1.25rem !important;
+  margin-bottom: 0 !important;     /* 공백 제거 */
 }
-.card.all-topics:hover {
+.cards > *:first-child .card-arrow {
+  top: 22px !important;            /* 얇아진 패딩에 맞춰 화살표 위치 정렬 */
+  color: var(--accent) !important;
+}
+/* 첫 번째 박스에서 쓸데없이 밀림을 유발할 수 있는 번호나 텍스트 강제 숨김 */
+.cards > *:first-child .card-num,
+.cards > *:first-child p {
+  display: none !important;
+}
+/* 마우스 호버 시 힙하게 라임색으로 꽉 차는 반전 효과 */
+.cards > *:first-child:hover .card,
+.cards >
