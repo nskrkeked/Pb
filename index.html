@@ -1386,6 +1386,16 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
+  // renderTopicCards 함수 내부
+const a = document.createElement('a');
+a.className = 'card card-link';
+
+// 이 부분이 핵심: 클릭 시 topic.html?topic=토픽이름 형태로 이동합니다.
+a.href = `topic.html?topic=${encodeURIComponent(t.name)}`; 
+
+a.innerHTML = `...`; // 카드 내부 구조
+container.appendChild(a);
+
 // ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
