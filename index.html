@@ -126,7 +126,13 @@ body {
 .dot.r { background:#ff5f57; } .dot.y { background:#febc2e; } .dot.g { background:#28c840; }
 .w1 { top:130px; left:80px; } .w2 { top:260px; left:280px; } .w3 { top:400px; left:120px; }
 
-
+/* ══════════════════════════════════════════
+   ABOUT
+══════════════════════════════════════════ */
+.about-section { padding:40px 80px; border-bottom:1px solid var(--border); background:var(--surface); }
+.about-inner { max-width:900px; display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin:0 auto; }
+.about-left { flex:1; }
+.about-text { font-size:0.95rem; line-height:1.9; color:var(--text-dim); margin-top:8px; }
 
 /* ══════════════════════════════════════════
    PAGE LAYOUT & TOC
@@ -949,25 +955,6 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
   el.addEventListener('click', e => { if (e.target === el) el.classList.remove('active'); });
 });
 
-// ══════════════════════════════════════════
-// ABOUT
-// ══════════════════════════════════════════
-function renderAbout() {
-  const txt = get('eng_about') || '안녕하세요. 공학을 좋아하는 학생입니다.<br>이 아카이브는 제가 배운 개념들을 정리하고 공유하는 공간입니다.';
-  document.getElementById('aboutText').innerHTML = txt;
-}
-
-function openAboutEdit() {
-  document.getElementById('aboutEdit').value = (get('eng_about') || '').replace(/<br>/g,'\n');
-  openOverlay('aboutModal');
-}
-
-function saveAbout() {
-  const v = document.getElementById('aboutEdit').value.trim().replace(/\n/g,'<br>');
-  set('eng_about', v);
-  renderAbout();
-  closeModal('aboutModal');
-}
 
 // ══════════════════════════════════════════
 // PROFILE
